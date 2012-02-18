@@ -1,0 +1,399 @@
+# -------------------------------------------------------------
+#	Trenz Electronic develops, manufactures and supplies embedded products for industrial applications.
+#
+#	Spartan-3E 1600K Industrial Micromodule, 125 MHz 
+#	TE0300-01BM
+#	
+#	Powerful industrial grade micromodule contains Spartan-3E FPGA, DDR Memory and USB 2.0 Microcontroller
+#	
+#	The FPGA Micromodule integrates a leading-edge Spartan-3E 1600K gates FPGA, an USB2.0 microcontroller, DDR Ram, configuration Flash and power supply on a tiny footprint. A large number of configurable I/Os are provided via shock proof B2B mini-connectors.
+#	Thus, the Micromodule is ideally suited for battery-powered and small-sized applications.
+#	
+#	It is intended to be used as an OEM board, or combined with our carrier boards, the micromodule serves as a powerful system widely used for educational and research activities.
+#	
+#	Boards with other configurations, or equipped with industrial temperature grade parts are available on request
+#	
+#	Software for SPI Flash programming over USB, as well as reference designs for high speed data transfer over USB are included.
+#	Key features
+#	
+#	    Small and ruggedized design
+#	    Versatile
+#	    x16 DDR with up to 666 MByte/s bandwidth
+#	    Supports OPB and MIG DDR cores
+#	    3 on-board DC-DC converters for high efficiency
+#	
+#	Specification
+#	
+#	    Xilinx Spartan-3E FPGA XC3S1600E-4FGG320C
+#	    Cypress FX2 USB2.0 CY7C68013A-56LFXC
+#	    Onboard 125 MHz oscillator for high performance
+#	    32 MBit SPI Flash for configuration and user data
+#	    512 MBit DDR Ram
+#	    104 I/Os + 6 inputs available on B2B connectors
+#	    2 x 80 pin Hirose DF17 shockproof B2B connectors
+#	    1 x LED
+#	    1 x push button
+#	    Power supply input via USB, or B2B
+#	    Programming is implemented via JTAG, SPI or USB. (The required adaptor is not included)
+#	    Size only 40.5 mm x 47.5 mm
+#
+#	
+# -------------------------------------------------------------
+
+ATTRIBUTE VENDOR = Trenz
+
+ATTRIBUTE NAME = Spartan-E 1600K Industrial Micromodule 01BM
+ATTRIBUTE REVISION = 1
+ATTRIBUTE SPEC_URL = http://www.trenz-electronic.de/products/fpga-boards/trenz-electronic/te0300-spartan-3e-series.html
+ATTRIBUTE CONTACT_INFO_URL = http://www.trenz-electronic.de/meta-navigation/imprint-disclaimer.html
+ATTRIBUTE DESC = Spartan-E 1600K Industrial Micromodule, 01BM
+ATTRIBUTE LONG_DESC =  'The FPGA Micromodule integrates a leading-edge Spartan-3E 1600K gates FPGA, an USB2.0 microcontroller, DDR Ram, configuration Flash and power supply on a tiny footprint. A large number of configurable I/Os are provided via shock proof B2B mini-connectors.'
+
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = clock_generator_0
+  ATTRIBUTE IOTYPE = XIL_CLOCK_V1
+  PARAMETER CLK_FREQ = 125000000, IO_IS = clk_freq, RANGE = (125000000) # 125 Mhz
+  PORT SYSCLK = sys_clk_pin, IO_IS = ext_clk
+END
+
+BEGIN IO_INTERFACE
+ ATTRIBUTE IOTYPE = XIL_CLOCK_V1
+   ATTRIBUTE INSTANCE = usb_clk_0
+  PARAMETER CLK_FREQ = 24000000, IO_IS=clk_freq, RANGE=(24000000)   # 24 Mhz
+   PORT USER_USB_CLK = usb_clk_s, IO_IS=ext_clk
+END
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = proc_sys_reset_0
+  ATTRIBUTE IOTYPE = XIL_RESET_V1
+  PARAMETER RST_POLARITY = 1, IO_IS = polarity, VALUE_NOTE = Active HIGH
+  PORT FPGA.RESET = sys_rst_pin, IO_IS = ext_rst
+END
+
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = RS232
+  ATTRIBUTE IOTYPE = XIL_UART_V1
+  PORT RX = fpga_0_RS232_RX, IO_IS = serial_in
+  PORT TX = fpga_0_RS232_TX, IO_IS = serial_out
+END
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = LED
+  ATTRIBUTE IOTYPE = XIL_GPIO_V1
+  PARAMETER C_GPIO_WIDTH = 1, IO_IS = num_bits
+  PARAMETER C_IS_DUAL = 0, IO_IS = is_dual
+  PARAMETER C_IS_BIDIR = 0, IO_IS = is_bidir
+  PARAMETER C_ALL_INPUTS = 0, IO_IS = all_inputs  
+  PORT GPIO_IO_0 = fpga_0_LED_GPIO_d_out_0, IO_IS = gpio_data_out[0]
+END
+
+#"PB is userdefined. If you need reset, define it as reset."
+#BEGIN IO_INTERFACE
+#  ATTRIBUTE INSTANCE = Push_Buttons
+#  ATTRIBUTE IOTYPE = XIL_GPIO_V1
+#  PARAMETER C_GPIO_WIDTH = 1, IO_IS = num_bits
+#  PARAMETER C_IS_DUAL = 0, IO_IS = is_dual
+#  PARAMETER C_IS_BIDIR = 0, IO_IS = is_bidir
+#  PARAMETER C_ALL_INPUTS = 1, IO_IS = all_inputs
+#  PORT Push_Buttons_GPIO_IO0 = Push_Buttons_GPIO_IO_0, IO_IS = gpio_data_in[0]
+#END
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_MEMORY_V1
+  ATTRIBUTE INSTANCE = DDR_SDRAM
+  PARAMETER C_MEM_PARTNO="MT46V32M16-6", IO_IS=C_MEM_PARTNO
+  PARAMETER C_BASEADDR = 0x00000000, IO_IS = C_BASEADDR
+  PARAMETER C_HIGHADDR = 0x07ffffff, IO_IS = C_HIGHADDR
+  PARAMETER C_MEM_DATA_WIDTH =16, IO_IS = C_MEM_DATA_WIDTH
+  PARAMETER C_MEM_CLK_WIDTH=1, IO_IS=C_MEM_CLK_WIDTH
+  PARAMETER C_MEM_DM_WIDTH =2, IO_IS=C_MEM_DM_WIDTH
+  PARAMETER C_MEM_DQS_WIDTH=2, IO_IS=C_MEM_DQS_WIDTH
+  PARAMETER C_MEM_ADDR_WIDTH = 13, IO_IS = C_MEM_ADDR_WIDTH
+  PARAMETER C_MEM_BANKADDR_WIDTH = 2, IO_IS = C_MEM_BANKADDR_WIDTH
+  PARAMETER C_MEM_TYPE           = DDR, IO_IS = C_MEM_TYPE
+
+  PARAMETER C_PORT_CONFIG = 1, IO_IS = C_PORT_CONFIG 
+  PARAMETER C_NUM_PORTS = 2, IO_IS = C_NUM_PORTS 
+  PARAMETER C_PIM0_BASETYPE = 2, IO_IS = C_PIM0_BASETYPE
+  PARAMETER C_PIM1_BASETYPE = 4, IO_IS = C_PIM1_BASETYPE 
+  PARAMETER C_PIM1_DATA_WIDTH = 32, IO_IS = C_PIM1_DATA_WIDTH
+                                                                                
+  PORT DDR_Addr_0 = fpga_0_DDR_SDRAM_DDR_Addr_0, IO_IS = ddr_address[0]
+  PORT DDR_Addr_1 = fpga_0_DDR_SDRAM_DDR_Addr_1, IO_IS = ddr_address[1]
+  PORT DDR_Addr_2 = fpga_0_DDR_SDRAM_DDR_Addr_2, IO_IS = ddr_address[2]
+  PORT DDR_Addr_3 = fpga_0_DDR_SDRAM_DDR_Addr_3, IO_IS = ddr_address[3]
+  PORT DDR_Addr_4 = fpga_0_DDR_SDRAM_DDR_Addr_4, IO_IS = ddr_address[4]
+  PORT DDR_Addr_5 = fpga_0_DDR_SDRAM_DDR_Addr_5, IO_IS = ddr_address[5]
+  PORT DDR_Addr_6 = fpga_0_DDR_SDRAM_DDR_Addr_6, IO_IS = ddr_address[6]
+  PORT DDR_Addr_7 = fpga_0_DDR_SDRAM_DDR_Addr_7, IO_IS = ddr_address[7]
+  PORT DDR_Addr_8 = fpga_0_DDR_SDRAM_DDR_Addr_8, IO_IS = ddr_address[8]
+  PORT DDR_Addr_9 = fpga_0_DDR_SDRAM_DDR_Addr_9, IO_IS = ddr_address[9]
+  PORT DDR_Addr_10 = fpga_0_DDR_SDRAM_DDR_Addr_10, IO_IS = ddr_address[10]
+  PORT DDR_Addr_11 = fpga_0_DDR_SDRAM_DDR_Addr_11, IO_IS = ddr_address[11]
+  PORT DDR_Addr_12 = fpga_0_DDR_SDRAM_DDR_Addr_12, IO_IS = ddr_address[12]
+  PORT DDR_BankAddr_0 = fpga_0_DDR_SDRAM_DDR_BankAddr_0, IO_IS = ddr_BankAddr[0]
+  PORT DDR_BankAddr_1 = fpga_0_DDR_SDRAM_DDR_BankAddr_1, IO_IS = ddr_BankAddr[1]
+  PORT DDR_CASn = fpga_0_DDR_SDRAM_DDR_CAS_n, IO_IS = ddr_col_addr_select
+  PORT DDR_CKE = fpga_0_DDR_SDRAM_DDR_CE, IO_IS = ddr_clock_enable
+  PORT DDR_CSn_0 = fpga_0_DDR_SDRAM_DDR_CS_n, IO_IS = ddr_chip_select
+  PORT DDR_RASn = fpga_0_DDR_SDRAM_DDR_RAS_n, IO_IS = ddr_row_addr_select
+  PORT DDR_WEn = fpga_0_DDR_SDRAM_DDR_WE_n, IO_IS = ddr_write_enable
+  PORT DDR_CLK_0 = fpga_0_DDR_SDRAM_DDR_Clk_0, IO_IS = ddr_clk[0]
+  PORT DDR_CLK_n_0 = fpga_0_DDR_SDRAM_DDR_Clk_n_0, IO_IS = ddr_clk_n[0]
+  PORT DDR_DM_0 = fpga_0_DDR_SDRAM_DDR_DM_0, IO_IS = ddr_data_mask[0]
+  PORT DDR_DM_1 = fpga_0_DDR_SDRAM_DDR_DM_1, IO_IS = ddr_data_mask[1]
+  PORT DDR_DQS_0 = fpga_0_DDR_SDRAM_DDR_DQS_0, IO_IS = ddr_data_strobe[0]
+  PORT DDR_DQS_1 = fpga_0_DDR_SDRAM_DDR_DQS_1, IO_IS = ddr_data_strobe[1]
+  PORT DDR_DQ_0 =  fpga_0_DDR_SDRAM_DDR_DQ_0 ,   IO_IS = ddr_data[0] 
+  PORT DDR_DQ_1 =  fpga_0_DDR_SDRAM_DDR_DQ_1 ,   IO_IS = ddr_data[1] 
+  PORT DDR_DQ_2 =  fpga_0_DDR_SDRAM_DDR_DQ_2 ,   IO_IS = ddr_data[2] 
+  PORT DDR_DQ_3 =  fpga_0_DDR_SDRAM_DDR_DQ_3 ,   IO_IS = ddr_data[3] 
+  PORT DDR_DQ_4 =  fpga_0_DDR_SDRAM_DDR_DQ_4 ,   IO_IS = ddr_data[4] 
+  PORT DDR_DQ_5 =  fpga_0_DDR_SDRAM_DDR_DQ_5 ,   IO_IS = ddr_data[5] 
+  PORT DDR_DQ_6 =  fpga_0_DDR_SDRAM_DDR_DQ_6 ,   IO_IS = ddr_data[6] 
+  PORT DDR_DQ_7 =  fpga_0_DDR_SDRAM_DDR_DQ_7 ,   IO_IS = ddr_data[7] 
+  PORT DDR_DQ_8 =  fpga_0_DDR_SDRAM_DDR_DQ_8 ,   IO_IS = ddr_data[8] 
+  PORT DDR_DQ_9 =  fpga_0_DDR_SDRAM_DDR_DQ_9 ,   IO_IS = ddr_data[9] 
+  PORT DDR_DQ_10 = fpga_0_DDR_SDRAM_DDR_DQ_10,   IO_IS = ddr_data[10]
+  PORT DDR_DQ_11 = fpga_0_DDR_SDRAM_DDR_DQ_11,   IO_IS = ddr_data[11]
+  PORT DDR_DQ_12 = fpga_0_DDR_SDRAM_DDR_DQ_12,   IO_IS = ddr_data[12]
+  PORT DDR_DQ_13 = fpga_0_DDR_SDRAM_DDR_DQ_13,   IO_IS = ddr_data[13]
+  PORT DDR_DQ_14 = fpga_0_DDR_SDRAM_DDR_DQ_14,   IO_IS = ddr_data[14]
+  PORT DDR_DQ_15 = fpga_0_DDR_SDRAM_DDR_DQ_15,   IO_IS = ddr_data[15]
+
+  PORT DDR_DQS_DIV_I = fpga_0_DDR_SDRAM_DDR_DQS_Div_O, IO_IS = ddr_dqs_div_i
+  PORT DDR_DQS_DIV_O = fpga_0_DDR_SDRAM_DDR_DQS_Div_I, IO_IS = ddr_dqs_div_o
+
+END
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_SPI_V1
+   ATTRIBUTE INSTANCE = SPI_FLASH
+   PARAMETER C_BASEADDR=0x00000000, IO_IS=C_BASEADDR
+   PARAMETER C_HIGHADDR=0x0000007f, IO_IS=C_HIGHADDR              
+   PARAMETER C_NUM_OFFCHIP_SS_BITS=1, IO_IS=offchip_ss_bits
+   PARAMETER C_NUM_SS_BITS=1, IO_IS=ss_bits
+   PARAMETER C_FIFO_EXIST=1, IO_IS=fifo_exist
+   PARAMETER C_SCK_RATIO = 32, IO_IS = clk_freq
+   PARAMETER C_NUM_TRANSFER_BITS = 8, IO_IS = num_transfer_bits
+
+   PORT SPISEL= net_vcc, IO_IS=slave_select_n, INITIALVAL=VCC
+   PORT MISO=fpga_0_SPI_FLASH_MISO, IO_IS=data_out
+   PORT MOSI=fpga_0_SPI_FLASH_MOSI, IO_IS=data_in
+   PORT SCK=fpga_0_SPI_FLASH_SCK, IO_IS=clk_out
+   PORT SS0=fpga_0_SPI_FLASH_SS_0, IO_IS=chip_select[0]
+END  
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_IICSLAVE_V1
+  ATTRIBUTE CORENAME = xps_i2c_slave
+  #ATTRIBUTE VERSION = 1.20.a
+  ATTRIBUTE INSTANCE = xps_i2c_slave_0 
+  PARAMETER C_BASEADDR=0x00000000, IO_IS=C_BASEADDR
+  PARAMETER C_HIGHADDR=0x0000007f, IO_IS=C_HIGHADDR     
+# BSB wizard can't stand pin duplication, require manual selection afterward         
+#  PORT USB_IFCLK = USB_i2c_IFCLK, IO_IS = usb_ifclk
+  PORT USB_INT = USB_INT0, IO_IS = usb_int
+  PORT USB_SCL = USB_SCL, IO_IS = usb_i2cclk
+  PORT USB_SDA = USB_SDA, IO_IS = usb_i2cdata
+END
+                                                                                                                                                            
+BEGIN IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_USBFX2_V1
+  ATTRIBUTE CORENAME = xps_fx2
+  #ATTRIBUTE VERSION = 1.30.a
+  ATTRIBUTE INSTANCE = xps_fx2_0 
+  PARAMETER C_BASEADDR=0x00000000, IO_IS=C_BASEADDR
+  PARAMETER C_HIGHADDR=0x0000007f, IO_IS=C_HIGHADDR              
+# comment this line if you want to use usb_clk_s as system clock
+  PORT USB_IFCLK = usb_clk_s, IO_IS = usb_ifclk
+  PORT USB_FD_0 = USB_FD_0, IO_IS = usb_fd[0]
+  PORT USB_FD_1 = USB_FD_1, IO_IS = usb_fd[1]
+  PORT USB_FD_2 = USB_FD_2, IO_IS = usb_fd[2]
+  PORT USB_FD_3 = USB_FD_3, IO_IS = usb_fd[3]
+  PORT USB_FD_4 = USB_FD_4, IO_IS = usb_fd[4]
+  PORT USB_FD_5 = USB_FD_5, IO_IS = usb_fd[5]
+  PORT USB_FD_6 = USB_FD_6, IO_IS = usb_fd[6]
+  PORT USB_FD_7 = USB_FD_7, IO_IS = usb_fd[7]
+  PORT USB_FIFOADR_0 = USB_FIFOADR_0, IO_IS = usb_fifoadr[0]
+  PORT USB_FIFOADR_1 = USB_FIFOADR_1, IO_IS = usb_fifoadr[1]
+  PORT USB_PKTEND = USB_PKTEND, IO_IS = usb_pktend 
+  PORT USB_SLOE = USB_SLOE, IO_IS = usb_sloe   
+  PORT USB_FLAGD = USB_FLAGD, IO_IS = usb_flagd
+  PORT USB_FLAGC = USB_FLAGC, IO_IS = usb_flagc
+  PORT USB_FLAGB = USB_FLAGB, IO_IS = usb_flagb
+  PORT USB_FLAGA = USB_FLAGA, IO_IS = usb_flaga
+  PORT USB_SLWR = USB_SLWR, IO_IS = usb_slwr
+  PORT USB_SLRD = USB_SLRD, IO_IS = usb_sdrd
+# PORT ChipScope = xps_fx2_0_ChipScope
+#  PORT TX_FIFO_Clk = clk_100_0000MHzDCM0, IO_IS = fifo_clk_tx
+#  PORT RX_FIFO_Clk = clk_100_0000MHzDCM0, IO_IS = fifo_clk_rx
+# experimental section related to Bus-to-Bus interconnect
+#  BUS_INTERFACE FIFO_IN = xps_npi_dma_0_DMA_OUT
+#  PORT FIFO_OUT = xps_fx2_0_FIFO_OUT, IO_IS = fx2_fifo_out
+#  PORT RX_FIFO_VLD = xps_fx2_0_FIFO_OUT_valid
+#, IO_IS = fx2_fifo_vld
+#  PORT RX_FIFO_RDY = xps_fx2_0_FIFO_OUT_ready
+#, IO_IS = fx2_fifo_rdy
+END
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_NPIDMA_V1
+  ATTRIBUTE CORENAME = xps_npi_dma
+  #ATTRIBUTE VERSION = 3.00.a
+  ATTRIBUTE INSTANCE = xps_npi_dma_0 
+  PARAMETER C_SWAP_INPUT = 1
+  PARAMETER C_SWAP_OUTPUT = 1
+  PARAMETER C_NPI_DATA_WIDTH = 32
+  PARAMETER C_BASEADDR = 0xc1a00000
+  PARAMETER C_HIGHADDR = 0xc1a0ffff
+#  PORT NPI_Clk = clk_100_0000MHzDCM0, IO_IS = npi_clk
+# experimental section related to Bus-to-Bus interconnect
+#  BUS_INTERFACE DMA_OUT = xps_npi_dma_0_DMA_OUT
+#  BUS_INTERFACE DMA_IN = xps_fx2_0_FIFO_OUT
+#  PORT DMA_IN = xps_fx2_0_FIFO_OUT, IO_IS = npi_dma_in
+  #BUS_INTERFACE MPMC_PIM = xps_npi_dma_0_MPMC_PIM
+  #PORT IP2INTC_Irpt = xps_npi_dma_0_IP2INTC_Irpt
+#  PORT Capture_data_0  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_0, IO_IS = npi_dma_data[0]
+#  PORT Capture_data_1  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_1, IO_IS = npi_dma_data[1]
+#  PORT Capture_data_2  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_2, IO_IS = npi_dma_data[2]
+#  PORT Capture_data_3  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_3, IO_IS = npi_dma_data[3]
+#  PORT Capture_data_4  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_4, IO_IS = npi_dma_data[4]
+#  PORT Capture_data_5  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_5, IO_IS = npi_dma_data[5]
+#  PORT Capture_data_6  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_6, IO_IS = npi_dma_data[6]
+#  PORT Capture_data_7  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_7, IO_IS = npi_dma_data[7]
+#  PORT Capture_data_8  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_8, IO_IS = npi_dma_data[8]
+#  PORT Capture_data_9  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_9, IO_IS = npi_dma_data[9]
+#  PORT Capture_data_10  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_10, IO_IS = npi_dma_data[10]
+#  PORT Capture_data_11  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_11, IO_IS = npi_dma_data[11]
+#  PORT Capture_data_12  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_12, IO_IS = npi_dma_data[12]
+#  PORT Capture_data_13  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_13, IO_IS = npi_dma_data[13]
+#  PORT Capture_data_14  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_14, IO_IS = npi_dma_data[14]
+#  PORT Capture_data_15  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_15, IO_IS = npi_dma_data[15]
+#  PORT Capture_data_16  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_16, IO_IS = npi_dma_data[16]
+#  PORT Capture_data_17  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_17, IO_IS = npi_dma_data[17]
+#  PORT Capture_data_18  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_18, IO_IS = npi_dma_data[18]
+#  PORT Capture_data_19  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_19, IO_IS = npi_dma_data[19]
+#  PORT Capture_data_20  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_20, IO_IS = npi_dma_data[20]
+#  PORT Capture_data_21  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_21, IO_IS = npi_dma_data[21]
+#  PORT Capture_data_22  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_22, IO_IS = npi_dma_data[22]
+#  PORT Capture_data_23  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_23, IO_IS = npi_dma_data[23]
+#  PORT Capture_data_24  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_24, IO_IS = npi_dma_data[24]
+#  PORT Capture_data_25  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_25, IO_IS = npi_dma_data[25]
+#  PORT Capture_data_26  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_26, IO_IS = npi_dma_data[26]
+#  PORT Capture_data_27  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_27, IO_IS = npi_dma_data[27]
+#  PORT Capture_data_28  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_28, IO_IS = npi_dma_data[28]
+#  PORT Capture_data_29  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_29, IO_IS = npi_dma_data[29]
+#  PORT Capture_data_30  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_30, IO_IS = npi_dma_data[30]
+#  PORT Capture_data_31  = xps_fx2_0_FIFO_OUT.RX_FIFO_DOUT_31, IO_IS = npi_dma_data[31]
+#  PORT Capture_valid = xps_fx2_0_FIFO_OUT_Valid
+#, IO_IS = npi_dma_valid
+#  PORT Capture_ready = xps_fx2_0_FIFO_OUT_Ready
+#, IO_IS = npi_dma_ready
+END
+
+BEGIN FPGA
+  ATTRIBUTE INSTANCE = fpga_0
+  ATTRIBUTE FAMILY = spartan3e
+  ATTRIBUTE DEVICE = xc3s1600e
+  ATTRIBUTE PACKAGE = fg320
+  ATTRIBUTE SPEED_GRADE = -4
+  ATTRIBUTE JTAG_POSITION = 1
+  PORT sys_clk_pin = sys_clk_pin, UCF_NET_STRING = ("TNM_NET = sys_clk_pin", "LOC = U10", "IOSTANDARD=LVCMOS25", "CLOCK_DEDICATED_ROUTE = FALSE")
+  PORT USB_IFCLK_pin = usb_clk_s, UCF_NET_STRING = ("LOC = K4", "IOSTANDARD = LVCMOS33", "TNM_NET = USB_IFCLK_pin")
+  PORT sys_rst_pin = sys_rst_pin, UCF_NET_STRING = ("LOC = V16", "IOSTANDARD=LVCMOS25", "PULLDOWN", "TIG")
+
+  ### RS232 ###
+  PORT fpga_0_RS232_RX_pin = fpga_0_RS232_RX, UCF_NET_STRING = ("LOC = B13", "IOSTANDARD=LVCMOS25")
+  PORT fpga_0_RS232_TX_pin = fpga_0_RS232_TX, UCF_NET_STRING = ("LOC = B14", "IOSTANDARD=LVCMOS25")
+
+  ### LED 1BIT ### 
+  PORT fpga_0_LED_GPIO_d_out_pin0 = fpga_0_LED_GPIO_d_out_0, UCF_NET_STRING = ("LOC = R10", "IOSTANDARD=LVCMOS25")#, "PULLDOWN", "SLEW=SLOW", "DRIVE=2")
+
+  ### PUSH BUTTON 1 BIT ###
+  #"PB is userdefined. If you need reset, define it as reset."
+  #PORT Push_Buttons_GPIO_IO0 = Push_Buttons_GPIO_IO_0, UCF_NET_STRING = ("LOC = V16", "IOSTANDARD=LVCMOS33", "PULLUP")#, "SLEW=SLOW", "DRIVE=2")
+
+  ### USB-FX2 external connections ###
+# uncomment if reference clock not in use anymore
+#  PORT USB_IFCLK_pin = USB_IFCLK, UCF_NET_STRING = ( "LOC = K4", "IOSTANDARD=LVCMOS33")
+  PORT USB_SLRD_pin = USB_SLRD, UCF_NET_STRING = ( "LOC = M4", "IOSTANDARD=LVCMOS33")
+  PORT USB_SLWR_pin = USB_SLWR, UCF_NET_STRING = ( "LOC = L3", "IOSTANDARD=LVCMOS33")
+  PORT USB_FLAGA_pin = USB_FLAGA, UCF_NET_STRING = ( "LOC = K2", "IOSTANDARD=LVCMOS33")
+  PORT USB_FLAGB_pin = USB_FLAGB, UCF_NET_STRING = ( "LOC = J1", "IOSTANDARD=LVCMOS33")
+  PORT USB_FLAGC_pin = USB_FLAGC, UCF_NET_STRING = ( "LOC = J2", "IOSTANDARD=LVCMOS33")
+  PORT USB_FLAGD_pin = USB_FLAGD, UCF_NET_STRING = ( "LOC = F2", "IOSTANDARD=LVCMOS33")
+  PORT USB_PKTEND_pin = USB_PKTEND, UCF_NET_STRING = ( "LOC = F1", "IOSTANDARD=LVCMOS33")
+  PORT USB_SLOE_pin = USB_SLOE, UCF_NET_STRING = ( "LOC = H2", "IOSTANDARD=LVCMOS33")
+  PORT USB_FIFOADR_pin_0 = USB_FIFOADR_0, UCF_NET_STRING = ( "LOC = G3", "IOSTANDARD=LVCMOS33")
+  PORT USB_FIFOADR_pin_1 = USB_FIFOADR_1, UCF_NET_STRING = ( "LOC = G4", "IOSTANDARD=LVCMOS33")
+  PORT USB_FD_pin_0 = USB_FD_0, UCF_NET_STRING = ( "LOC = L1", "IOSTANDARD=LVCMOS33")
+  PORT USB_FD_pin_1 = USB_FD_1, UCF_NET_STRING = ( "LOC = L2", "IOSTANDARD=LVCMOS33")
+  PORT USB_FD_pin_2 = USB_FD_2, UCF_NET_STRING = ( "LOC = K5", "IOSTANDARD=LVCMOS33")
+  PORT USB_FD_pin_3 = USB_FD_3, UCF_NET_STRING = ( "LOC = K6", "IOSTANDARD=LVCMOS33")
+  PORT USB_FD_pin_4 = USB_FD_4, UCF_NET_STRING = ( "LOC = J4", "IOSTANDARD=LVCMOS33")
+  PORT USB_FD_pin_5 = USB_FD_5, UCF_NET_STRING = ( "LOC = J5", "IOSTANDARD=LVCMOS33")
+  PORT USB_FD_pin_6 = USB_FD_6, UCF_NET_STRING = ( "LOC = H4", "IOSTANDARD=LVCMOS33")
+  PORT USB_FD_pin_7 = USB_FD_7, UCF_NET_STRING = ( "LOC = H5", "IOSTANDARD=LVCMOS33")
+ 
+  ### USB-IIC external connection ###
+  PORT USB_SCL_pin = USB_SCL, UCF_NET_STRING = ( "LOC = L4", "IOSTANDARD=LVCMOS33")
+  PORT USB_SDA_pin = USB_SDA, UCF_NET_STRING = ( "LOC = K3", "IOSTANDARD=LVCMOS33")
+  PORT USB_INT0_pin = USB_INT0, UCF_NET_STRING = ( "LOC = H6", "IOSTANDARD=LVCMOS33")
+
+ ### DDR DDR_SDRAM ###
+ PORT fpga_0_DDR_SDRAM_DDR_Clk_pin_0 = fpga_0_DDR_SDRAM_DDR_Clk_0, UCF_NET_STRING=("LOC = C18", "IOSTANDARD = DIFF_SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Clk_n_pin_0 = fpga_0_DDR_SDRAM_DDR_Clk_n_0, UCF_NET_STRING=("LOC = C17", "IOSTANDARD = DIFF_SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQS_Div_I = fpga_0_DDR_SDRAM_DDR_DQS_Div_I, UCF_NET_STRING=("LOC = F14", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQS_Div_O = fpga_0_DDR_SDRAM_DDR_DQS_Div_O, UCF_NET_STRING=("LOC = F15", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_0 = fpga_0_DDR_SDRAM_DDR_Addr_0, UCF_NET_STRING=("LOC = R18", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_1 = fpga_0_DDR_SDRAM_DDR_Addr_1, UCF_NET_STRING=("LOC = N14", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_2 = fpga_0_DDR_SDRAM_DDR_Addr_2, UCF_NET_STRING=("LOC = N15", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_3 = fpga_0_DDR_SDRAM_DDR_Addr_3, UCF_NET_STRING=("LOC = P18", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_4 = fpga_0_DDR_SDRAM_DDR_Addr_4, UCF_NET_STRING=("LOC = P17", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_5 = fpga_0_DDR_SDRAM_DDR_Addr_5, UCF_NET_STRING=("LOC = M16", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_6 = fpga_0_DDR_SDRAM_DDR_Addr_6, UCF_NET_STRING=("LOC = M15", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_7 = fpga_0_DDR_SDRAM_DDR_Addr_7, UCF_NET_STRING=("LOC = M18", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_8 = fpga_0_DDR_SDRAM_DDR_Addr_8, UCF_NET_STRING=("LOC = N18", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_9 = fpga_0_DDR_SDRAM_DDR_Addr_9, UCF_NET_STRING=("LOC = J13", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_10 = fpga_0_DDR_SDRAM_DDR_Addr_10, UCF_NET_STRING=("LOC = J12", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_11 = fpga_0_DDR_SDRAM_DDR_Addr_11, UCF_NET_STRING=("LOC = E16", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_Addr_pin_12 = fpga_0_DDR_SDRAM_DDR_Addr_12, UCF_NET_STRING=("LOC = E15", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_BankAddr_pin_0 = fpga_0_DDR_SDRAM_DDR_BankAddr_0, UCF_NET_STRING=("LOC = U18", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_BankAddr_pin_1 = fpga_0_DDR_SDRAM_DDR_BankAddr_1, UCF_NET_STRING=("LOC = T18", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_CAS_n_pin = fpga_0_DDR_SDRAM_DDR_CAS_n, UCF_NET_STRING=("LOC = R15", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_CE_pin = fpga_0_DDR_SDRAM_DDR_CE, UCF_NET_STRING=("LOC = T15", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_CS_n_pin = fpga_0_DDR_SDRAM_DDR_CS_n, UCF_NET_STRING=("LOC = M14", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_RAS_n_pin = fpga_0_DDR_SDRAM_DDR_RAS_n, UCF_NET_STRING=("LOC = P16", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_WE_n_pin = fpga_0_DDR_SDRAM_DDR_WE_n, UCF_NET_STRING=("LOC = T17", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DM_pin_0 = fpga_0_DDR_SDRAM_DDR_DM_0, UCF_NET_STRING=("LOC = L16", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DM_pin_1 = fpga_0_DDR_SDRAM_DDR_DM_1, UCF_NET_STRING=("LOC = D17", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQS_0 = fpga_0_DDR_SDRAM_DDR_DQS_0, UCF_NET_STRING=("LOC = G16", "IOSTANDARD = SSTL2_I", "PULLUP")
+ PORT fpga_0_DDR_SDRAM_DDR_DQS_1 = fpga_0_DDR_SDRAM_DDR_DQS_1, UCF_NET_STRING=("LOC = K14", "IOSTANDARD = SSTL2_I", "PULLUP")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_0 = fpga_0_DDR_SDRAM_DDR_DQ_0, UCF_NET_STRING=("LOC = G13", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_1 = fpga_0_DDR_SDRAM_DDR_DQ_1, UCF_NET_STRING=("LOC = G14", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_2 = fpga_0_DDR_SDRAM_DDR_DQ_2, UCF_NET_STRING=("LOC = F17", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_3 = fpga_0_DDR_SDRAM_DDR_DQ_3, UCF_NET_STRING=("LOC = F18", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_4 = fpga_0_DDR_SDRAM_DDR_DQ_4, UCF_NET_STRING=("LOC = H15", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_5 = fpga_0_DDR_SDRAM_DDR_DQ_5, UCF_NET_STRING=("LOC = H14", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_6 = fpga_0_DDR_SDRAM_DDR_DQ_6, UCF_NET_STRING=("LOC = H17", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_7 = fpga_0_DDR_SDRAM_DDR_DQ_7, UCF_NET_STRING=("LOC = H16", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_8 = fpga_0_DDR_SDRAM_DDR_DQ_8, UCF_NET_STRING=("LOC = J14", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_9 = fpga_0_DDR_SDRAM_DDR_DQ_9, UCF_NET_STRING=("LOC = J15", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_10 = fpga_0_DDR_SDRAM_DDR_DQ_10, UCF_NET_STRING=("LOC = J16", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_11 = fpga_0_DDR_SDRAM_DDR_DQ_11, UCF_NET_STRING=("LOC = J17", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_12 = fpga_0_DDR_SDRAM_DDR_DQ_12, UCF_NET_STRING=("LOC = K12", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_13 = fpga_0_DDR_SDRAM_DDR_DQ_13, UCF_NET_STRING=("LOC = K13", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_14 = fpga_0_DDR_SDRAM_DDR_DQ_14, UCF_NET_STRING=("LOC = L15", "IOSTANDARD = SSTL2_I")
+ PORT fpga_0_DDR_SDRAM_DDR_DQ_15 = fpga_0_DDR_SDRAM_DDR_DQ_15, UCF_NET_STRING=("LOC = L18", "IOSTANDARD = SSTL2_I")
+
+### SPI FLASH ###
+ PORT fpga_0_SPI_FLASH_MISO_pin = fpga_0_SPI_FLASH_MISO, UCF_NET_STRING=("LOC=N10 | IOSTANDARD = LVCMOS25")
+ PORT fpga_0_SPI_FLASH_MOSI_pin = fpga_0_SPI_FLASH_MOSI, UCF_NET_STRING=("LOC=T4 | IOSTANDARD = LVCMOS25")
+ PORT fpga_0_SPI_FLASH_SCK_pin = fpga_0_SPI_FLASH_SCK, UCF_NET_STRING=("LOC=U16 | IOSTANDARD = LVCMOS25")
+ PORT fpga_0_SPI_FLASH_SS_pin0 = fpga_0_SPI_FLASH_SS_0, UCF_NET_STRING=("LOC=U3 | IOSTANDARD = LVCMOS25")
+
+END
+
