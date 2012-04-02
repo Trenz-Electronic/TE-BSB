@@ -3,6 +3,7 @@ This folder contains Base System Builder Wizard files for Xilinx EDK.
 
 ## Install
 The board files has to be coplied into EDK installation location.
+
 * Xilinx\13.2\ISE_DS\EDK\board
 
 Also for the pcores, they have to appear under:
