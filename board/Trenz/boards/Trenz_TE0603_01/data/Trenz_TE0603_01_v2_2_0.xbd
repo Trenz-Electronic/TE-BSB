@@ -1,0 +1,657 @@
+# -------------------------------------------------------------
+#	Trenz Electronic develops, manufactures and supplies embedded products for industrial applications.
+#
+#	Trenz Electronic GigaBee XC6SLX45
+#	TE0600-01
+#
+#	Trenz Electronic GigaBee XC6SLX series are industrial-grade FPGA micromodules integrating a leading-edge Xilinx Spartan-6 LX FPGA, gigabit Ethernet transceiver (physical layer), two independent banks of 16-bit-wide 128 MByte DDR3 SDRAM, 8 Mbyte SPI Flash memory for configuration and operation, and powerful switch-mode power supplies for all on-board voltages. A large number of configurable I/Os is provided via robust board-to-board (B2B) connectors.
+#
+#	All this on a tiny footprint, smaller than a credit card, at the most competitive price. Hardware and software development environment as well as reference designs are available.
+#	Key Features
+#
+#	    Industrial-grade Xilinx Spartan-6 LX FPGA micromodule LX45
+#	    10/100/1000 gigabit Ethernet transceiver (PHY)
+#	    2 × 16-bit-wide 1 Gb (128 MB) DDR3 SDRAM
+#	    64 Mbit (8 MB) SPI Flash memory (for configuration and operation) accessible through:
+#	        B2B connector (SPI direct)
+#	        FPGA
+#	        JTAG port (SPI indirect)
+#	        gigabit Ethernet transceiver
+#	    FPGA configuration through:
+#	        B2B connector
+#	        JTAG port
+#	        SPI Flash memory
+#	    Plug-on module with 2 × 100-pin high-speed hermaphroditic strips
+#	    Up to 52 differential, up to 109 single-ended (+ 1 dual-purpose) FPGA I/O pins available on B2B strips
+#	    3.0 A x 1.2 V power rail
+#	    1.0 A x 1.5 V power rail
+#	    125 MHz reference clock signal
+#	    Single-ended custom oscillator (option)
+#	    eFUSE bit-stream encryption (LX100 or larger)
+#	    1 user LED
+#	    Evenly-spread supply pins for good signal integrity
+#	    Other assembly options for cost or performance optimization available upon request
+#
+#	Specifications
+#
+#	    Xilinx Spartan-6 LX FPGA: XC6SLX45-2FGG484C = 43 k logic cells, commercial grade
+#	    10/100/1000 gigabit Ethernet transceiver (physical layer)
+#	    Marvell Semiconductor 88E1111
+#	    2 × independent 16-bit-wide (data-bus) 1 gigabit (128 megabyte) DDR3 SDRAM
+#	    64 megabit (8 megabyte) serial Flash memory with dual/quad SPI interface
+#	    48-bit node address chip
+#	    Maxim Integrated Products DS2502-E48
+#	    2 x fine-pitch (0.5 mm) 100-pin high-speed (up to 10.0 GHz / 20 Gbps) hermaphroditic strips
+#	    LSHM-150-04.0-L-DV-A-S-K-TR
+#	    Up to 52 differential FPGA input/output pins available on B2B strips
+#	    Up to 109 single-ended (+ 1 dual-purpose) FPGA input/output pins available on B2B strips
+#	    Ethernet (PHY), JTAG and SPI pins available on B2B strips
+#	    3.0 A high-efficiency DC-DC switching regulator for power rail 1.2 V
+#	    1.0 A high-efficiency DC-DC switching regulator for power rail 1.5 V
+#	    800 mA DC-DC linear regulator for power rails 2.5 V and VCCAUX
+#	    Processor supervisory circuits with power-fail and watchdog
+#	    Texas Instruments TPS3705-33
+#	    125 MHz clock signal (system + user)
+#	    Footprint for custom single-ended oscillator (option)
+#	    1 x LED (user)
+#	    Power supply voltage: 3.3 V
+#	    Power supply source: board-to-board interconnect (e.g. carrier board)
+#	    Dimensions: 50 mm × 40 mm (20 cm2)
+#	    Minimum height: 5 mm (without connectors)
+#	    Minimum height on carrier board: 13 mm
+#	    Weight: 16.0 to 16.5 g
+#	    Temperature grades:
+#	        commercial (C-type FPGA device)
+#	        industrial (I-type FPGA device)
+#	
+# -------------------------------------------------------------
+ATTRIBUTE VENDOR = Trenz
+ATTRIBUTE NAME = Spartan-6 LX FPGA micromodule LX45 with carrier board
+ATTRIBUTE REVISION = 1
+ATTRIBUTE SPEC_URL = http://www.trenz-electronic.de/products/fpga-boards/trenz-electronic/gigabee-xc6slx.html
+ATTRIBUTE CONTACT_INFO_URL = http://www.trenz-electronic.de/meta-navigation/imprint-disclaimer.html
+ATTRIBUTE DESC = Industrial-grade Xilinx Spartan-6 LX FPGA micromodule LX45 with carrier board
+ATTRIBUTE LONG_DESC =  'Trenz Electronic GigaBee XC6SLX series are industrial-grade FPGA micromodules integrating a leading-edge Xilinx Spartan-6 LX FPGA, gigabit Ethernet transceiver (physical layer), two independent banks of 16-bit-wide 128 MByte DDR3 SDRAM, 8 Mbyte SPI Flash memory for configuration and operation, and powerful switch-mode power supplies for all on-board voltages. A large number of configurable I/Os is provided via robust board-to-board (B2B) connectors. Placed on TE0603 carrier board.'
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = clock_generator_0
+  ATTRIBUTE IOTYPE = XIL_CLOCK_V1
+  PARAMETER CLK_FREQ = 125000000, IO_IS = clk_freq, RANGE = (125000000) # 125 Mhz
+  PORT USER_SYS_CLK = dcm_clk_s, IO_IS = ext_clk
+END
+
+#uncomment the following if your board has a user clock not equal to 100MHz
+#this will make the reference clock field in BSB editable
+
+#BEGIN IO_INTERFACE
+#  ATTRIBUTE IOTYPE = XIL_CLOCK_V1
+#   ATTRIBUTE INSTANCE =userclk
+#   PARAMETER CLK_FREQ =100000000, IO_IS=clk_freq
+#   PORT SYSCLK = CLK_SOCKET, IO_IS=ext_clk
+#END
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = proc_sys_reset_0
+  ATTRIBUTE IOTYPE = XIL_RESET_V1
+  PARAMETER RST_POLARITY = 1, IO_IS = polarity, VALUE_NOTE = Active High
+  PORT FPGA.RESET = sys_rst_s, IO_IS = ext_rst
+END
+
+# 1st RS232
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = RS232
+  ATTRIBUTE IOTYPE = XIL_UART_V1
+  PARAMETER C_BAUDRATE = 115200
+  PARAMETER C_DATA_BITS = 8
+  PARAMETER C_USE_PARITY = 0
+  PARAMETER C_ODD_PARITY = 0
+  PORT fpga_0_RS232_RX_pin = fpga_0_RS232_RX_pin, IO_IS = serial_in
+  PORT fpga_0_RS232_TX_pin = fpga_0_RS232_TX_pin, IO_IS = serial_out
+END
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = LEDs_5Bit
+  ATTRIBUTE IOTYPE = XIL_GPIO_V1
+  PARAMETER C_GPIO_WIDTH = 5, IO_IS = num_bits
+  PARAMETER C_IS_DUAL = 0, IO_IS = is_dual
+  PARAMETER C_IS_BIDIR = 0, IO_IS = is_bidir
+  PARAMETER C_ALL_INPUTS = 0, IO_IS = all_inputs
+  
+  PORT fpga_0_LED_GPIO_d_out_pin_0 = fpga_0_LED_GPIO_d_out_0, IO_IS = gpio_io[0]
+  PORT fpga_0_LED_GPIO_d_out_pin_1 = fpga_0_LED_GPIO_d_out_1, IO_IS = gpio_io[1]
+  PORT fpga_0_LED_GPIO_d_out_pin_2 = fpga_0_LED_GPIO_d_out_2, IO_IS = gpio_io[2]
+  PORT fpga_0_LED_GPIO_d_out_pin_3 = fpga_0_LED_GPIO_d_out_3, IO_IS = gpio_io[3]
+  PORT fpga_0_LED_GPIO_d_out_pin_4 = fpga_0_LED_GPIO_d_out_4, IO_IS = gpio_io[4]
+END
+
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = Push_Buttons_4Bit
+  ATTRIBUTE IOTYPE = XIL_GPIO_V1
+  PARAMETER C_GPIO_WIDTH = 1, IO_IS = num_bits
+  PARAMETER C_IS_DUAL = 0, IO_IS = is_dual
+  PARAMETER C_IS_BIDIR = 1, IO_IS = is_bidir
+  PARAMETER C_ALL_INPUTS = 1, IO_IS = all_inputs
+  PORT Push_Buttons_4Bit_GPIO_INIT = Push_Buttons_4Bit_GPIO_INIT, IO_IS = gpio_io[0]
+#  PORT Push_Buttons_4Bit_GPIO_IO1 = Push_Buttons_4Bit_GPIO_IO_1, IO_IS = gpio_io[1]
+#  PORT Push_Buttons_4Bit_GPIO_IO2 = Push_Buttons_4Bit_GPIO_IO_2, IO_IS = gpio_io[2]
+#  PORT Push_Buttons_4Bit_GPIO_IO3 = Push_Buttons_4Bit_GPIO_IO_3, IO_IS = gpio_io[3]
+END
+
+                                                                                
+#BEGIN IO_INTERFACE
+#  ATTRIBUTE INSTANCE = DIP_Switches_4Bit
+#  ATTRIBUTE IOTYPE = XIL_GPIO_V1
+#  PARAMETER C_GPIO_WIDTH = 4, IO_IS = num_bits
+#  PARAMETER C_IS_DUAL = 0, IO_IS = is_dual
+#  PARAMETER C_IS_BIDIR = 1, IO_IS = is_bidir
+#  PARAMETER C_ALL_INPUTS = 1, IO_IS = all_inputs
+#  PORT DIP_Switches_4Bit_GPIO_IO_0 = DIP_Switches_4Bit_GPIO_IO_0, IO_IS = gpio_io[0]
+#  PORT DIP_Switches_4Bit_GPIO_IO_1 = DIP_Switches_4Bit_GPIO_IO_1, IO_IS = gpio_io[1]
+#  PORT DIP_Switches_4Bit_GPIO_IO_2 = DIP_Switches_4Bit_GPIO_IO_2, IO_IS = gpio_io[2]
+#  PORT DIP_Switches_4Bit_GPIO_IO_3 = DIP_Switches_4Bit_GPIO_IO_3, IO_IS = gpio_io[3]
+#END
+
+
+
+### Ethernet Lite
+BEGIN IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_ETHERNET_V1
+  ATTRIBUTE INSTANCE = Ethernet_MAC
+  ATTRIBUTE EXCLUSIVE =  Ethernet
+  PARAMETER C_DEV_BLK_ID = 0, IO_IS = C_DEV_BLK_ID
+  PARAMETER C_DEV_MIR_ENABLE = 0, IO_IS = C_DEV_MIR_ENABLE
+  PARAMETER C_IPIF_RDFIFO_DEPTH = 16384, IO_IS = C_IPIF_RDFIFO_DEPTH
+  PARAMETER C_IPIF_WRFIFO_DEPTH = 16384, IO_IS = C_IPIF_WRFIFO_DEPTH
+  PARAMETER C_RESET_PRESENT = 1, IO_IS = C_RESET_PRESENT
+  PARAMETER C_INCLUDE_DEV_PENCODER = 0, IO_IS = C_INCLUDE_DEV_PENCODER
+  PARAMETER C_MAC_FIFO_DEPTH = 16, IO_IS = C_MAC_FIFO_DEPTH
+  PORT RESET    = phy_rst_n, IO_IS=PHY_RESETn, INITIALVAL = VCC
+  PORT MDINT    = phy_mii_int_n, IO_IS=INTERRUPT, SIGIS=INTERRUPT, SENSITIVITY = LEVEL_LOW, INTERRUPT_PRIORITY=MEDIUM 
+  PORT CRS      = phy_crs,       IO_IS=ETH_CRS
+  PORT COL      = phy_col,       IO_IS=ETH_COL
+  PORT PHY_MDC  = phy_mii_clk,   IO_IS=ETH_MDC
+  PORT PHY_MDIO = phy_mii_data,  IO_IS=ETH_MDIO
+
+  PORT TX_EN    = phy_tx_en,     IO_IS=ETH_TXEN
+  PORT TX_CLK   = phy_tx_clk,    IO_IS=ETH_TXC
+  PORT TX_ER    = phy_tx_er,     IO_IS=ETH_TXER
+  PORT TXD1     = phy_tx_data_0, IO_IS = ETH_TXD[0]
+  PORT TXD1     = phy_tx_data_1, IO_IS = ETH_TXD[1]
+  PORT TXD2     = phy_tx_data_2, IO_IS = ETH_TXD[2]
+  PORT TXD3     = phy_tx_data_3, IO_IS = ETH_TXD[3]
+
+  PORT RX_ER    = phy_rx_er,     IO_IS=ETH_RXER
+  PORT RX_CLK   = phy_rx_clk,    IO_IS=ETH_RXC
+  PORT RX_DV    = phy_dv,        IO_IS=ETH_RXDV
+  PORT RXD0     = phy_rx_data_0, IO_IS = ETH_RXD[0]
+  PORT RXD1     = phy_rx_data_1, IO_IS = ETH_RXD[1]
+  PORT RXD2     = phy_rx_data_2, IO_IS = ETH_RXD[2]
+  PORT RXD3     = phy_rx_data_3, IO_IS = ETH_RXD[3]
+
+END
+
+### Soft_TEMAC
+BEGIN IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_TEMAC_V1
+  ATTRIBUTE INSTANCE = Soft_TEMAC
+  ATTRIBUTE EXCLUSIVE = Ethernet
+  PARAMETER C_PHY_TYPE = 1, IO_IS=C_PHY_TYPE
+  PARAMETER C_TEMAC1_ENABLED= 0, IO_IS=C_TEMAC1_ENABLED
+  PARAMETER C_TEMAC_TYPE = 2, IO_IS=C_TEMAC_TYPE
+  PARAMETER C_TEMAC0_PHYADDR = "0b00001", IO_IS=C_TEMAC0_PHYADDR
+  PARAMETER C_TEMAC0_TXFIFO = 8192, IO_IS = C_TEMAC0_TXFIFO
+  PARAMETER C_TEMAC0_TXCSUM = 1, IO_IS = C_TEMAC0_TXCSUM
+  PARAMETER C_TEMAC0_RXFIFO = 8192, IO_IS = C_TEMAC0_RXFIFO
+  PARAMETER C_TEMAC0_RXCSUM = 1, IO_IS = C_TEMAC0_RXCSUM
+  PARAMETER C_TEMAC0_STATS = 0, IO_IS = C_TEMAC0_STATS
+
+  PORT TemacPhy_RST_n = fpga_0_Soft_TEMAC_TemacPhy_RST_n_pin, IO_IS = PhyResetN
+  PORT GMII_TXD_0_0 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_0, IO_IS = GMII_TXD_0[0]
+  PORT GMII_TXD_0_1 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_1, IO_IS = GMII_TXD_0[1]
+  PORT GMII_TXD_0_2 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_2, IO_IS = GMII_TXD_0[2]
+  PORT GMII_TXD_0_3 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_3, IO_IS = GMII_TXD_0[3]
+  PORT GMII_TXD_0_4 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_4, IO_IS = GMII_TXD_0[4]
+  PORT GMII_TXD_0_5 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_5, IO_IS = GMII_TXD_0[5]
+  PORT GMII_TXD_0_6 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_6, IO_IS = GMII_TXD_0[6]
+  PORT GMII_TXD_0_7 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_7, IO_IS = GMII_TXD_0[7]
+  PORT GMII_RXD_0_0 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_0, IO_IS = GMII_RXD_0[0]
+  PORT GMII_RXD_0_1 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_1, IO_IS = GMII_RXD_0[1]
+  PORT GMII_RXD_0_2 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_2, IO_IS = GMII_RXD_0[2]
+  PORT GMII_RXD_0_3 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_3, IO_IS = GMII_RXD_0[3]
+  PORT GMII_RXD_0_4 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_4, IO_IS = GMII_RXD_0[4]
+  PORT GMII_RXD_0_5 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_5, IO_IS = GMII_RXD_0[5]
+  PORT GMII_RXD_0_6 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_6, IO_IS = GMII_RXD_0[6]
+  PORT GMII_RXD_0_7 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_7, IO_IS = GMII_RXD_0[7]
+
+  PORT GMII_TX_EN_0 = fpga_0_Soft_TEMAC_GMII_TX_EN_0_pin, IO_IS = GMII_TX_EN_0
+  PORT GMII_TX_ER_0 = fpga_0_Soft_TEMAC_GMII_TX_ER_0_pin, IO_IS = GMII_TX_ER_0
+  PORT GMII_TX_CLK_0 = fpga_0_Soft_TEMAC_GMII_TX_CLK_0_pin, IO_IS = GMII_TX_CLK_0
+
+  PORT GMII_RX_DV_0 = fpga_0_Soft_TEMAC_GMII_RX_DV_0_pin, IO_IS = GMII_RX_DV_0
+  PORT GMII_RX_ER_0 = fpga_0_Soft_TEMAC_GMII_RX_ER_0_pin, IO_IS = GMII_RX_ER_0
+  PORT GMII_RX_CLK_0 = fpga_0_Soft_TEMAC_GMII_RX_CLK_0_pin, IO_IS = GMII_RX_CLK_0
+
+  PORT MII_TX_CLK_0 = fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin, IO_IS = MII_TX_CLK_0
+  PORT MDC_0 = fpga_0_Soft_TEMAC_MDC_0_pin, IO_IS = MDC_0
+  PORT MDIO_0 = fpga_0_Soft_TEMAC_MDIO_0_pin, IO_IS = MDIO_0
+END
+
+BEGINE IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_MEMORY_V1
+  ATTRIBUTE INSTANCE = MCB1
+  PARAMETER C_MEM_TYPE = DDR3, IO_IS = C_MEM_TYPE
+  PARAMETER C_MEM_PARTNO="MT41J64M16XX-187E", IO_IS=C_MEM_PARTNO
+  PARAMETER C_BASEADDR = 0x00000000, IO_IS = C_BASEADDR
+  PARAMETER C_HIGHADDR = 0x07ffffff, IO_IS = C_HIGHADDR
+  PARAMETER C_DDR3_DQSN_ENABLE = 1, IO_IS = C_DDR3_DQSN_ENABLE
+  PARAMETER C_MEM_DATA_WIDTH = 16, IO_IS = C_MEM_DATA_WIDTH
+#  PARAMETER C_MEM_ADDR_WIDTH = 11, IO_IS = C_MEM_ADDR_WIDTH
+  PARAMETER C_MEM_BANKADDR_WIDTH = 3, IO_IS = C_MEM_BANKADDR_WIDTH
+  PARAMETER C_MEM_DQS_WIDTH = 8, IO_IS = C_MEM_DQS_WIDTH
+  PARAMETER C_MEM_DM_WIDTH = 8, IO_IS = C_MEM_DM_WIDTH
+
+  PARAMETER C_PORT_CONFIG = 1, IO_IS = C_PORT_CONFIG
+  PARAMETER C_MCB_LOC = MEMC1, IO_IS = C_MCB_LOC
+  PARAMETER C_MEM_ODT_TYPE = 3, IO_IS = C_MEM_ODT_TYPE
+  PARAMETER C_MEM_CALIBRATION_SOFT_IP = TRUE, IO_IS = C_MEM_CALIBRATION_SOFT_IP
+  PARAMETER C_MEM_SKIP_IN_TERM_CAL = 0, IO_IS = C_MEM_SKIP_IN_TERM_CAL 
+  PARAMETER C_MEM_SKIP_DYNAMIC_CAL = 0, IO_IS = C_MEM_SKIP_DYNAMIC_CAL
+
+  PARAMETER C_MCB_RZQ_LOC = M19, IO_IS = C_MCB_RZQ_LOC
+  PARAMETER C_MCB_ZIO_LOC = C19, IO_IS = C_MCB_ZIO_LOC
+
+  PORT mcbx_dram_addr_0 = fpga_0_MCB1_mcbx_dram_addr_pin_0, IO_IS = MCB_ADDRESS[0]
+  PORT mcbx_dram_addr_1 = fpga_0_MCB1_mcbx_dram_addr_pin_1, IO_IS = MCB_ADDRESS[1]
+  PORT mcbx_dram_addr_2 = fpga_0_MCB1_mcbx_dram_addr_pin_2, IO_IS = MCB_ADDRESS[2]
+  PORT mcbx_dram_addr_3 = fpga_0_MCB1_mcbx_dram_addr_pin_3, IO_IS = MCB_ADDRESS[3]
+  PORT mcbx_dram_addr_4 = fpga_0_MCB1_mcbx_dram_addr_pin_4, IO_IS = MCB_ADDRESS[4]
+  PORT mcbx_dram_addr_5 = fpga_0_MCB1_mcbx_dram_addr_pin_5, IO_IS = MCB_ADDRESS[5]
+  PORT mcbx_dram_addr_6 = fpga_0_MCB1_mcbx_dram_addr_pin_6, IO_IS = MCB_ADDRESS[6]
+  PORT mcbx_dram_addr_7 = fpga_0_MCB1_mcbx_dram_addr_pin_7, IO_IS = MCB_ADDRESS[7]
+  PORT mcbx_dram_addr_8 = fpga_0_MCB1_mcbx_dram_addr_pin_8, IO_IS = MCB_ADDRESS[8]
+  PORT mcbx_dram_addr_9 = fpga_0_MCB1_mcbx_dram_addr_pin_9, IO_IS = MCB_ADDRESS[9]
+  PORT mcbx_dram_addr_10 = fpga_0_MCB1_mcbx_dram_addr_pin_10, IO_IS = MCB_ADDRESS[10]
+  PORT mcbx_dram_addr_11 = fpga_0_MCB1_mcbx_dram_addr_pin_11, IO_IS = MCB_ADDRESS[11]
+  PORT mcbx_dram_addr_12 = fpga_0_MCB1_mcbx_dram_addr_pin_12, IO_IS = MCB_ADDRESS[12]
+  #PORT mcbx_dram_addr_13 = fpga_0_MCB1_mcbx_dram_addr_pin_13, IO_IS = MCB_ADDRESS[13]
+  #PORT mcbx_dram_addr_14 = fpga_0_MCB1_mcbx_dram_addr_pin_14, IO_IS = MCB_ADDRESS[14]
+  PORT mcbx_dram_ba_0 = fpga_0_MCB1_mcbx_dram_ba_pin_0, IO_IS = MCB_BANKADDR[0]
+  PORT mcbx_dram_ba_1 = fpga_0_MCB1_mcbx_dram_ba_pin_1, IO_IS = MCB_BANKADDR[1]
+  PORT mcbx_dram_ba_2 = fpga_0_MCB1_mcbx_dram_ba_pin_2, IO_IS = MCB_BANKADDR[2]
+  PORT mcbx_dram_ras_n = fpga_0_MCB1_mcbx_dram_ras_n_pin, IO_IS = MCB_ROW_ADDR_SELECT
+  PORT mcbx_dram_cas_n = fpga_0_MCB1_mcbx_dram_cas_n_pin, IO_IS = MCB_COL_ADDR_SELECT
+  PORT mcbx_dram_we_n = fpga_0_MCB1_mcbx_dram_we_n_pin, IO_IS = MCB_WRITE_ENABLE
+  PORT mcbx_dram_cke = fpga_0_MCB1_mcbx_dram_cke_pin, IO_IS = MCB_CLK_ENABLE
+  PORT mcbx_dram_clk = fpga_0_MCB1_mcbx_dram_clk_pin, IO_IS = MCB_CLK
+  PORT mcbx_dram_clk_n = fpga_0_MCB1_mcbx_dram_clk_n_pin, IO_IS = MCB_CLK_N
+  PORT mcbx_dram_dq_0 = fpga_0_MCB1_mcbx_dram_dq_pin_0, IO_IS = MCB_DQ[0]
+  PORT mcbx_dram_dq_1 = fpga_0_MCB1_mcbx_dram_dq_pin_1, IO_IS = MCB_DQ[1]
+  PORT mcbx_dram_dq_2 = fpga_0_MCB1_mcbx_dram_dq_pin_2, IO_IS = MCB_DQ[2]
+  PORT mcbx_dram_dq_3 = fpga_0_MCB1_mcbx_dram_dq_pin_3, IO_IS = MCB_DQ[3]
+  PORT mcbx_dram_dq_4 = fpga_0_MCB1_mcbx_dram_dq_pin_4, IO_IS = MCB_DQ[4]
+  PORT mcbx_dram_dq_5 = fpga_0_MCB1_mcbx_dram_dq_pin_5, IO_IS = MCB_DQ[5]
+  PORT mcbx_dram_dq_6 = fpga_0_MCB1_mcbx_dram_dq_pin_6, IO_IS = MCB_DQ[6]
+  PORT mcbx_dram_dq_7 = fpga_0_MCB1_mcbx_dram_dq_pin_7, IO_IS = MCB_DQ[7]
+  PORT mcbx_dram_dq_8 = fpga_0_MCB1_mcbx_dram_dq_pin_8, IO_IS = MCB_DQ[8]
+  PORT mcbx_dram_dq_9 = fpga_0_MCB1_mcbx_dram_dq_pin_9, IO_IS = MCB_DQ[9]
+  PORT mcbx_dram_dq_10 = fpga_0_MCB1_mcbx_dram_dq_pin_10, IO_IS = MCB_DQ[10]
+  PORT mcbx_dram_dq_11 = fpga_0_MCB1_mcbx_dram_dq_pin_11, IO_IS = MCB_DQ[11]
+  PORT mcbx_dram_dq_12 = fpga_0_MCB1_mcbx_dram_dq_pin_12, IO_IS = MCB_DQ[12]
+  PORT mcbx_dram_dq_13 = fpga_0_MCB1_mcbx_dram_dq_pin_13, IO_IS = MCB_DQ[13]
+  PORT mcbx_dram_dq_14 = fpga_0_MCB1_mcbx_dram_dq_pin_14, IO_IS = MCB_DQ[14]
+  PORT mcbx_dram_dq_15 = fpga_0_MCB1_mcbx_dram_dq_pin_15, IO_IS = MCB_DQ[15]
+  PORT mcbx_dram_dqs = fpga_0_MCB1_mcbx_dram_dqs_pin, IO_IS = MCB_DQS
+  PORT mcbx_dram_dqs_n = fpga_0_MCB1_mcbx_dram_dqs_n_pin, IO_IS = MCB_DQS_N
+  PORT mcbx_dram_udqs = fpga_0_MCB1_mcbx_dram_udqs_pin, IO_IS = MCB_UDQS
+  PORT mcbx_dram_udqs_n = fpga_0_MCB1_mcbx_dram_udqs_n_pin, IO_IS = MCB_UDQS_N
+  PORT mcbx_dram_udm = fpga_0_MCB1_mcbx_dram_udm_pin, IO_IS = MCB_UDM
+  PORT mcbx_dram_ldm = fpga_0_MCB1_mcbx_dram_ldm_pin, IO_IS = MCB_LDM
+  PORT mcbx_dram_odt = fpga_0_MCB1_mcbx_dram_odt_pin, IO_IS = MCB_ODT
+  PORT mcbx_dram_ddr3_rst = fpga_0_MCB1_mcbx_dram_reset_n_pin, IO_IS = MCB_Rst
+  
+  PORT rzq = fpga_0_MCB1_rzq_pin, IO_IS = rzq
+  PORT zio = fpga_0_MCB1_zio_pin, IO_IS = zio
+
+END
+                                                                                                   
+BEGINE IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_MEMORY_V1
+  ATTRIBUTE INSTANCE = MCB3
+  PARAMETER C_MEM_TYPE = DDR3, IO_IS = C_MEM_TYPE
+  PARAMETER C_MEM_PARTNO="MT41J64M16XX-187E", IO_IS=C_MEM_PARTNO
+  PARAMETER C_BASEADDR = 0x00000000, IO_IS = C_BASEADDR
+  PARAMETER C_HIGHADDR = 0x07ffffff, IO_IS = C_HIGHADDR
+  PARAMETER C_DDR3_DQSN_ENABLE = 1, IO_IS = C_DDR3_DQSN_ENABLE
+  PARAMETER C_MEM_DATA_WIDTH = 16, IO_IS = C_MEM_DATA_WIDTH
+#  PARAMETER C_MEM_ADDR_WIDTH = 11, IO_IS = C_MEM_ADDR_WIDTH
+  PARAMETER C_MEM_BANKADDR_WIDTH = 3, IO_IS = C_MEM_BANKADDR_WIDTH
+  PARAMETER C_MEM_DQS_WIDTH = 8, IO_IS = C_MEM_DQS_WIDTH
+  PARAMETER C_MEM_DM_WIDTH = 8, IO_IS = C_MEM_DM_WIDTH
+
+  PARAMETER C_PORT_CONFIG = 1, IO_IS = C_PORT_CONFIG
+  PARAMETER C_MCB_LOC = MEMC3, IO_IS = C_MCB_LOC
+  PARAMETER C_MEM_ODT_TYPE = 3, IO_IS = C_MEM_ODT_TYPE
+  PARAMETER C_MEM_CALIBRATION_SOFT_IP = TRUE, IO_IS = C_MEM_CALIBRATION_SOFT_IP
+  PARAMETER C_MEM_SKIP_IN_TERM_CAL = 0, IO_IS = C_MEM_SKIP_IN_TERM_CAL 
+  PARAMETER C_MEM_SKIP_DYNAMIC_CAL = 0, IO_IS = C_MEM_SKIP_DYNAMIC_CAL
+
+  PARAMETER C_MCB_RZQ_LOC = K7, IO_IS = C_MCB_RZQ_LOC
+  PARAMETER C_MCB_ZIO_LOC = Y2, IO_IS = C_MCB_ZIO_LOC
+
+  PORT mcbx_dram_addr_0 = fpga_0_MCB3_mcbx_dram_addr_pin_0, IO_IS = MCB_ADDRESS[0]
+  PORT mcbx_dram_addr_1 = fpga_0_MCB3_mcbx_dram_addr_pin_1, IO_IS = MCB_ADDRESS[1]
+  PORT mcbx_dram_addr_2 = fpga_0_MCB3_mcbx_dram_addr_pin_2, IO_IS = MCB_ADDRESS[2]
+  PORT mcbx_dram_addr_3 = fpga_0_MCB3_mcbx_dram_addr_pin_3, IO_IS = MCB_ADDRESS[3]
+  PORT mcbx_dram_addr_4 = fpga_0_MCB3_mcbx_dram_addr_pin_4, IO_IS = MCB_ADDRESS[4]
+  PORT mcbx_dram_addr_5 = fpga_0_MCB3_mcbx_dram_addr_pin_5, IO_IS = MCB_ADDRESS[5]
+  PORT mcbx_dram_addr_6 = fpga_0_MCB3_mcbx_dram_addr_pin_6, IO_IS = MCB_ADDRESS[6]
+  PORT mcbx_dram_addr_7 = fpga_0_MCB3_mcbx_dram_addr_pin_7, IO_IS = MCB_ADDRESS[7]
+  PORT mcbx_dram_addr_8 = fpga_0_MCB3_mcbx_dram_addr_pin_8, IO_IS = MCB_ADDRESS[8]
+  PORT mcbx_dram_addr_9 = fpga_0_MCB3_mcbx_dram_addr_pin_9, IO_IS = MCB_ADDRESS[9]
+  PORT mcbx_dram_addr_10 = fpga_0_MCB3_mcbx_dram_addr_pin_10, IO_IS = MCB_ADDRESS[10]
+  PORT mcbx_dram_addr_11 = fpga_0_MCB3_mcbx_dram_addr_pin_11, IO_IS = MCB_ADDRESS[11]
+  PORT mcbx_dram_addr_12 = fpga_0_MCB3_mcbx_dram_addr_pin_12, IO_IS = MCB_ADDRESS[12]
+  #PORT mcbx_dram_addr_13 = fpga_0_MCB3_mcbx_dram_addr_pin_13, IO_IS = MCB_ADDRESS[13]
+  #PORT mcbx_dram_addr_14 = fpga_0_MCB3_mcbx_dram_addr_pin_14, IO_IS = MCB_ADDRESS[14]
+  PORT mcbx_dram_ba_0 = fpga_0_MCB3_mcbx_dram_ba_pin_0, IO_IS = MCB_BANKADDR[0]
+  PORT mcbx_dram_ba_1 = fpga_0_MCB3_mcbx_dram_ba_pin_1, IO_IS = MCB_BANKADDR[1]
+  PORT mcbx_dram_ba_2 = fpga_0_MCB3_mcbx_dram_ba_pin_2, IO_IS = MCB_BANKADDR[2]
+  PORT mcbx_dram_ras_n = fpga_0_MCB3_mcbx_dram_ras_n_pin, IO_IS = MCB_ROW_ADDR_SELECT
+  PORT mcbx_dram_cas_n = fpga_0_MCB3_mcbx_dram_cas_n_pin, IO_IS = MCB_COL_ADDR_SELECT
+  PORT mcbx_dram_we_n = fpga_0_MCB3_mcbx_dram_we_n_pin, IO_IS = MCB_WRITE_ENABLE
+  PORT mcbx_dram_cke = fpga_0_MCB3_mcbx_dram_cke_pin, IO_IS = MCB_CLK_ENABLE
+  PORT mcbx_dram_clk = fpga_0_MCB3_mcbx_dram_clk_pin, IO_IS = MCB_CLK
+  PORT mcbx_dram_clk_n = fpga_0_MCB3_mcbx_dram_clk_n_pin, IO_IS = MCB_CLK_N
+  PORT mcbx_dram_dq_0 = fpga_0_MCB3_mcbx_dram_dq_pin_0, IO_IS = MCB_DQ[0]
+  PORT mcbx_dram_dq_1 = fpga_0_MCB3_mcbx_dram_dq_pin_1, IO_IS = MCB_DQ[1]
+  PORT mcbx_dram_dq_2 = fpga_0_MCB3_mcbx_dram_dq_pin_2, IO_IS = MCB_DQ[2]
+  PORT mcbx_dram_dq_3 = fpga_0_MCB3_mcbx_dram_dq_pin_3, IO_IS = MCB_DQ[3]
+  PORT mcbx_dram_dq_4 = fpga_0_MCB3_mcbx_dram_dq_pin_4, IO_IS = MCB_DQ[4]
+  PORT mcbx_dram_dq_5 = fpga_0_MCB3_mcbx_dram_dq_pin_5, IO_IS = MCB_DQ[5]
+  PORT mcbx_dram_dq_6 = fpga_0_MCB3_mcbx_dram_dq_pin_6, IO_IS = MCB_DQ[6]
+  PORT mcbx_dram_dq_7 = fpga_0_MCB3_mcbx_dram_dq_pin_7, IO_IS = MCB_DQ[7]
+  PORT mcbx_dram_dq_8 = fpga_0_MCB3_mcbx_dram_dq_pin_8, IO_IS = MCB_DQ[8]
+  PORT mcbx_dram_dq_9 = fpga_0_MCB3_mcbx_dram_dq_pin_9, IO_IS = MCB_DQ[9]
+  PORT mcbx_dram_dq_10 = fpga_0_MCB3_mcbx_dram_dq_pin_10, IO_IS = MCB_DQ[10]
+  PORT mcbx_dram_dq_11 = fpga_0_MCB3_mcbx_dram_dq_pin_11, IO_IS = MCB_DQ[11]
+  PORT mcbx_dram_dq_12 = fpga_0_MCB3_mcbx_dram_dq_pin_12, IO_IS = MCB_DQ[12]
+  PORT mcbx_dram_dq_13 = fpga_0_MCB3_mcbx_dram_dq_pin_13, IO_IS = MCB_DQ[13]
+  PORT mcbx_dram_dq_14 = fpga_0_MCB3_mcbx_dram_dq_pin_14, IO_IS = MCB_DQ[14]
+  PORT mcbx_dram_dq_15 = fpga_0_MCB3_mcbx_dram_dq_pin_15, IO_IS = MCB_DQ[15]
+  PORT mcbx_dram_dqs = fpga_0_MCB3_mcbx_dram_dqs_pin, IO_IS = MCB_DQS
+  PORT mcbx_dram_dqs_n = fpga_0_MCB3_mcbx_dram_dqs_n_pin, IO_IS = MCB_DQS_N
+  PORT mcbx_dram_udqs = fpga_0_MCB3_mcbx_dram_udqs_pin, IO_IS = MCB_UDQS
+  PORT mcbx_dram_udqs_n = fpga_0_MCB3_mcbx_dram_udqs_n_pin, IO_IS = MCB_UDQS_N
+  PORT mcbx_dram_udm = fpga_0_MCB3_mcbx_dram_udm_pin, IO_IS = MCB_UDM
+  PORT mcbx_dram_ldm = fpga_0_MCB3_mcbx_dram_ldm_pin, IO_IS = MCB_LDM
+  PORT mcbx_dram_odt = fpga_0_MCB3_mcbx_dram_odt_pin, IO_IS = MCB_ODT
+  PORT mcbx_dram_ddr3_rst = fpga_0_MCB3_mcbx_dram_reset_n_pin, IO_IS = MCB_Rst
+  
+  PORT rzq = fpga_0_MCB3_rzq_pin, IO_IS = rzq
+  PORT zio = fpga_0_MCB3_zio_pin, IO_IS = zio
+
+END
+                                                                                                   
+
+# SPI FLASH
+BEGIN IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_SPI_V1
+  ATTRIBUTE INSTANCE = SPI_FLASH
+  ATTRIBUTE EXCLUSIVE = FLASH
+  PARAMETER C_SCK_RATIO = 16, IO_IS = clk_freq
+  PARAMETER C_NUM_SS_BITS = 1, IO_IS = ss_bits
+  PARAMETER C_NUM_TRANSFER_BITS = 8, IO_IS = num_transfer_bits
+  PORT SCK = fpga_0_SPI_FLASH_SCK_pin,  IO_IS = clk_out
+  PORT SI  = fpga_0_SPI_FLASH_MOSI_pin, IO_IS = data_in
+  PORT SO  = fpga_0_SPI_FLASH_MISO_pin, IO_IS = data_out
+  PORT CS  = fpga_0_SPI_FLASH_SS_pin,   IO_IS = chip_select[0]
+  PORT SPISEL = net_vcc, IO_IS = slave_select_n
+END
+
+BEGIN IO_INTERFACE
+   ATTRIBUTE IOTYPE = XIL_SPI_V1
+   ATTRIBUTE INSTANCE = SPI_microSD
+   PARAMETER C_NUM_SS_BITS=2, IO_IS=ss_bits
+# Set SPI clock rate between 100kHz and 400kHz   
+   PARAMETER C_SCK_RATIO = 256, IO_IS = clk_freq
+   PARAMETER C_NUM_TRANSFER_BITS = 8, IO_IS = num_transfer_bits
+
+   PORT SPISEL= net_vcc, IO_IS=slave_select_n
+   PORT MISO=socket_MicroSD_DAT0MISO, IO_IS=data_out
+   PORT MOSI=socket_MicroSD_CMDMOSI, IO_IS=data_in
+   PORT SCK=socket_MicroSD_CLKSCK, IO_IS=clk_out
+   PORT SS0=socket_MicroSD_CDCSDAT3_0, IO_IS=chip_select[0]
+   PORT SS1=socket_MicroSD_CDCSDAT3_1, IO_IS=chip_select[1]
+END
+
+# ONE WIRE
+BEGIN IO_INTERFACE
+  ATTRIBUTE IOTYPE = XIL_ONEWIRE_V1
+  ATTRIBUTE INSTANCE = plb_singlewire_0
+  ATTRIBUTE CORENAME = plb_onewire
+  PORT DQ_Wire = onewire_master_0_DQ_Wire,  IO_IS = dq_wire
+END
+
+BEGIN FPGA
+  ATTRIBUTE INSTANCE = fpga_0
+  ATTRIBUTE FAMILY = spartan6
+  ATTRIBUTE DEVICE = xc6slx45
+  ATTRIBUTE PACKAGE = fgg484
+  ATTRIBUTE SPEED_GRADE = -2
+  ATTRIBUTE JTAG_POSITION = 2 
+  PORT fpga_0_clk_125_sys_clk_pin = dcm_clk_s, UCF_NET_STRING = ("TNM_NET = fpga_0_clk_125_sys_clk_pin", "LOC = AA12", "IOSTANDARD=LVCMOS15")
+  PORT fpga_0_sys_rst_pin = sys_rst_s, UCF_NET_STRING = ("LOC = B2", "IOSTANDARD=LVCMOS15", "PULLDOWN", "TIG")
+
+  ### RS232 ###
+  PORT fpga_0_RS232_RX_pin = fpga_0_RS232_RX_pin, UCF_NET_STRING = ("LOC = C17", "IOSTANDARD=LVCMOS33")
+  PORT fpga_0_RS232_TX_pin = fpga_0_RS232_TX_pin, UCF_NET_STRING = ("LOC = A17", "IOSTANDARD=LVCMOS33")
+  #PORT RTS = uart1_cin, UCF_NET_STRING = ("LOC = T23", "IOSTANDARD=LVCMOS33")
+  #PORT CTS = uart1_cout, UCF_NET_STRING = ("LOC = T24", "IOSTANDARD=LVCMOS33")
+
+
+  ### LEDS 5BIT ### 
+  PORT fpga_0_LED_GPIO_d_out_pin_0 = fpga_0_LED_GPIO_d_out_0, UCF_NET_STRING = ("LOC = T20", "IOSTANDARD=LVCMOS15")
+  PORT fpga_0_LED_GPIO_d_out_pin_1 = fpga_0_LED_GPIO_d_out_1, UCF_NET_STRING = ("LOC = H8", "IOSTANDARD=LVCMOS15")
+  PORT fpga_0_LED_GPIO_d_out_pin_2 = fpga_0_LED_GPIO_d_out_2, UCF_NET_STRING = ("LOC = J7", "IOSTANDARD=LVCMOS15")
+  PORT fpga_0_LED_GPIO_d_out_pin_3 = fpga_0_LED_GPIO_d_out_3, UCF_NET_STRING = ("LOC = T4", "IOSTANDARD=LVCMOS15")
+  PORT fpga_0_LED_GPIO_d_out_pin_4 = fpga_0_LED_GPIO_d_out_4, UCF_NET_STRING = ("LOC = T3", "IOSTANDARD=LVCMOS15")
+
+  ### PUSH BUTTON 4 BIT ###
+  PORT Push_Buttons_4Bit_GPIO_INIT = Push_Buttons_4Bit_GPIO_INIT, UCF_NET_STRING = ("LOC = T6", "IOSTANDARD=LVCMOS15")
+#  PORT Push_Buttons_4Bit_GPIO_IO1 = Push_Buttons_4Bit_GPIO_IO_1, UCF_NET_STRING = ("LOC = G6", "IOSTANDARD=LVCMOS15")
+#  PORT Push_Buttons_4Bit_GPIO_IO2 = Push_Buttons_4Bit_GPIO_IO_2, UCF_NET_STRING = ("LOC = F5", "IOSTANDARD=LVCMOS15")
+#  PORT Push_Buttons_4Bit_GPIO_IO3 = Push_Buttons_4Bit_GPIO_IO_3, UCF_NET_STRING = ("LOC = C1", "IOSTANDARD=LVCMOS15")
+
+# DIP
+#  PORT DIP_Switches_4Bit_GPIO_IO_0 = DIP_Switches_4Bit_GPIO_IO_0, UCF_NET_STRING=("LOC=C18", "IOSTANDARD=LVCMOS25")
+#  PORT DIP_Switches_4Bit_GPIO_IO_1 = DIP_Switches_4Bit_GPIO_IO_1, UCF_NET_STRING=("LOC=Y6", "IOSTANDARD=LVCMOS25")
+#  PORT DIP_Switches_4Bit_GPIO_IO_2 = DIP_Switches_4Bit_GPIO_IO_2, UCF_NET_STRING=("LOC=W6", "IOSTANDARD=LVCMOS25")
+#  PORT DIP_Switches_4Bit_GPIO_IO_3 = DIP_Switches_4Bit_GPIO_IO_3, UCF_NET_STRING=("LOC=E4", "IOSTANDARD=LVCMOS15")
+                                                                                                                                                             
+
+
+   ### SPI FLASH
+   PORT fpga_0_SPI_FLASH_SCK_pin = fpga_0_SPI_FLASH_SCK_pin,  UCF_NET_STRING=("LOC=Y21",  "IOSTANDARD = LVCMOS25")
+   PORT fpga_0_SPI_FLASH_MOSI_pin = fpga_0_SPI_FLASH_MOSI_pin, UCF_NET_STRING=("LOC=AB20",  "IOSTANDARD = LVCMOS25")
+   PORT fpga_0_SPI_FLASH_MISO_pin = fpga_0_SPI_FLASH_MISO_pin, UCF_NET_STRING=("LOC=AA20",  "IOSTANDARD = LVCMOS25")
+   PORT fpga_0_SPI_FLASH_SS_pin = fpga_0_SPI_FLASH_SS_pin,   UCF_NET_STRING=("LOC=T5", "IOSTANDARD = LVCMOS25")
+
+   ### SPI microSD
+   PORT socket_MicroSD_DAT0MISO = socket_MicroSD_DAT0MISO, UCF_NET_STRING=("LOC=AA21", "IOSTANDARD=LVCMOS25") #B2B_B2_L2_P
+   PORT socket_MicroSD_CMDMOSI = socket_MicroSD_CMDMOSI, UCF_NET_STRING=("LOC=AB11", "IOSTANDARD=LVCMOS25") #B2B_B2_L32_N
+   PORT socket_MicroSD_CLKSCK = socket_MicroSD_CLKSCK,   UCF_NET_STRING=("LOC=Y12", "IOSTANDARD=LVCMOS25") #B2B_B2_L29_N
+   PORT socket_MicroSD_CDCSDAT3_0 = socket_MicroSD_CDCSDAT3_0, UCF_NET_STRING=("LOC=V11", "IOSTANDARD=LVCMOS25") #B2B_B2_L42_P
+#  PORT socket_MicroSD_CDCSDAT3_1 = socket_MicroSD_CDCSDAT3_1, UCF_NET_STRING=("LOC=V3", "IOSTANDARD=LVCMOS25")
+#  PORT socket_MicroSD_DAT1 = socket_MicroSD_DAT1, UCF_NET_STRING=("LOC=AB21", "IOSTANDARD=LVCMOS25") #B2B_B2_L2_N
+#  PORT socket_MicroSD_DAT2 = socket_MicroSD_DAT2, UCF_NET_STRING=("LOC=W11", "IOSTANDARD=LVCMOS25") #B2B_B2_L42_N
+
+   ### MCB1_DDR3
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_0 = fpga_0_MCB1_mcbx_dram_addr_pin_0, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_1 = fpga_0_MCB1_mcbx_dram_addr_pin_1, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_2 = fpga_0_MCB1_mcbx_dram_addr_pin_2, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_3 = fpga_0_MCB1_mcbx_dram_addr_pin_3, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_4 = fpga_0_MCB1_mcbx_dram_addr_pin_4, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_5 = fpga_0_MCB1_mcbx_dram_addr_pin_5, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_6 = fpga_0_MCB1_mcbx_dram_addr_pin_6, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_7 = fpga_0_MCB1_mcbx_dram_addr_pin_7, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_8 = fpga_0_MCB1_mcbx_dram_addr_pin_8, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_9 = fpga_0_MCB1_mcbx_dram_addr_pin_9, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_10 = fpga_0_MCB1_mcbx_dram_addr_pin_10, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_11 = fpga_0_MCB1_mcbx_dram_addr_pin_11, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_addr_pin_12 = fpga_0_MCB1_mcbx_dram_addr_pin_12, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   #PORT fpga_0_MCB1_mcbx_dram_addr_pin_13 = fpga_0_MCB1_mcbx_dram_addr_pin_13, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   #PORT fpga_0_MCB1_mcbx_dram_addr_pin_14 = fpga_0_MCB1_mcbx_dram_addr_pin_14, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_ba_pin_0 = fpga_0_MCB1_mcbx_dram_ba_pin_0, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_ba_pin_1 = fpga_0_MCB1_mcbx_dram_ba_pin_1, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_ba_pin_2 = fpga_0_MCB1_mcbx_dram_ba_pin_2, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_ras_n_pin = fpga_0_MCB1_mcbx_dram_ras_n_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_cas_n_pin = fpga_0_MCB1_mcbx_dram_cas_n_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_we_n_pin = fpga_0_MCB1_mcbx_dram_we_n_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_cke_pin = fpga_0_MCB1_mcbx_dram_cke_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_clk_pin = fpga_0_MCB1_mcbx_dram_clk_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_clk_n_pin = fpga_0_MCB1_mcbx_dram_clk_n_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_0 = fpga_0_MCB1_mcbx_dram_dq_pin_0, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_1 = fpga_0_MCB1_mcbx_dram_dq_pin_1, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_2 = fpga_0_MCB1_mcbx_dram_dq_pin_2, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_3 = fpga_0_MCB1_mcbx_dram_dq_pin_3, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_4 = fpga_0_MCB1_mcbx_dram_dq_pin_4, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_5 = fpga_0_MCB1_mcbx_dram_dq_pin_5, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_6 = fpga_0_MCB1_mcbx_dram_dq_pin_6, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_7 = fpga_0_MCB1_mcbx_dram_dq_pin_7, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_8 = fpga_0_MCB1_mcbx_dram_dq_pin_8, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_9 = fpga_0_MCB1_mcbx_dram_dq_pin_9, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_10 = fpga_0_MCB1_mcbx_dram_dq_pin_10, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_11 = fpga_0_MCB1_mcbx_dram_dq_pin_11, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_12 = fpga_0_MCB1_mcbx_dram_dq_pin_12, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_13 = fpga_0_MCB1_mcbx_dram_dq_pin_13, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_14 = fpga_0_MCB1_mcbx_dram_dq_pin_14, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dq_pin_15 = fpga_0_MCB1_mcbx_dram_dq_pin_15, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dqs_pin = fpga_0_MCB1_mcbx_dram_dqs_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_dqs_n_pin = fpga_0_MCB1_mcbx_dram_dqs_n_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_udqs_pin = fpga_0_MCB1_mcbx_dram_udqs_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_udqs_n_pin = fpga_0_MCB1_mcbx_dram_udqs_n_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_udm_pin = fpga_0_MCB1_mcbx_dram_udm_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_ldm_pin = fpga_0_MCB1_mcbx_dram_ldm_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_odt_pin = fpga_0_MCB1_mcbx_dram_odt_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB1_mcbx_dram_reset_n_pin = fpga_0_MCB1_mcbx_dram_reset_n_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   
+   # Loc not needed after rzq and zip parameters are added 
+   PORT fpga_0_MCB1_rzq_pin = fpga_0_MCB1_rzq_pin, UCF_NET_STRING=( "IOSTANDARD=SSTL15_II") 
+   PORT fpga_0_MCB1_zio_pin = fpga_0_MCB1_zio_pin, UCF_NET_STRING=( "IOSTANDARD=SSTL15_II") 
+   
+
+   ### MCB3_DDR3
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_0 = fpga_0_MCB3_mcbx_dram_addr_pin_0, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_1 = fpga_0_MCB3_mcbx_dram_addr_pin_1, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_2 = fpga_0_MCB3_mcbx_dram_addr_pin_2, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_3 = fpga_0_MCB3_mcbx_dram_addr_pin_3, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_4 = fpga_0_MCB3_mcbx_dram_addr_pin_4, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_5 = fpga_0_MCB3_mcbx_dram_addr_pin_5, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_6 = fpga_0_MCB3_mcbx_dram_addr_pin_6, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_7 = fpga_0_MCB3_mcbx_dram_addr_pin_7, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_8 = fpga_0_MCB3_mcbx_dram_addr_pin_8, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_9 = fpga_0_MCB3_mcbx_dram_addr_pin_9, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_10 = fpga_0_MCB3_mcbx_dram_addr_pin_10, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_11 = fpga_0_MCB3_mcbx_dram_addr_pin_11, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_addr_pin_12 = fpga_0_MCB3_mcbx_dram_addr_pin_12, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   #PORT fpga_0_MCB3_mcbx_dram_addr_pin_13 = fpga_0_MCB3_mcbx_dram_addr_pin_13, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   #PORT fpga_0_MCB3_mcbx_dram_addr_pin_14 = fpga_0_MCB3_mcbx_dram_addr_pin_14, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_ba_pin_0 = fpga_0_MCB3_mcbx_dram_ba_pin_0, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_ba_pin_1 = fpga_0_MCB3_mcbx_dram_ba_pin_1, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_ba_pin_2 = fpga_0_MCB3_mcbx_dram_ba_pin_2, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_ras_n_pin = fpga_0_MCB3_mcbx_dram_ras_n_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_cas_n_pin = fpga_0_MCB3_mcbx_dram_cas_n_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_we_n_pin = fpga_0_MCB3_mcbx_dram_we_n_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_cke_pin = fpga_0_MCB3_mcbx_dram_cke_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_clk_pin = fpga_0_MCB3_mcbx_dram_clk_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_clk_n_pin = fpga_0_MCB3_mcbx_dram_clk_n_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_0 = fpga_0_MCB3_mcbx_dram_dq_pin_0, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_1 = fpga_0_MCB3_mcbx_dram_dq_pin_1, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_2 = fpga_0_MCB3_mcbx_dram_dq_pin_2, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_3 = fpga_0_MCB3_mcbx_dram_dq_pin_3, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_4 = fpga_0_MCB3_mcbx_dram_dq_pin_4, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_5 = fpga_0_MCB3_mcbx_dram_dq_pin_5, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_6 = fpga_0_MCB3_mcbx_dram_dq_pin_6, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_7 = fpga_0_MCB3_mcbx_dram_dq_pin_7, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_8 = fpga_0_MCB3_mcbx_dram_dq_pin_8, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_9 = fpga_0_MCB3_mcbx_dram_dq_pin_9, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_10 = fpga_0_MCB3_mcbx_dram_dq_pin_10, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_11 = fpga_0_MCB3_mcbx_dram_dq_pin_11, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_12 = fpga_0_MCB3_mcbx_dram_dq_pin_12, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_13 = fpga_0_MCB3_mcbx_dram_dq_pin_13, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_14 = fpga_0_MCB3_mcbx_dram_dq_pin_14, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dq_pin_15 = fpga_0_MCB3_mcbx_dram_dq_pin_15, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dqs_pin = fpga_0_MCB3_mcbx_dram_dqs_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_dqs_n_pin = fpga_0_MCB3_mcbx_dram_dqs_n_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_udqs_pin = fpga_0_MCB3_mcbx_dram_udqs_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_udqs_n_pin = fpga_0_MCB3_mcbx_dram_udqs_n_pin, UCF_NET_STRING=("IOSTANDARD = DIFF_SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_udm_pin = fpga_0_MCB3_mcbx_dram_udm_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_ldm_pin = fpga_0_MCB3_mcbx_dram_ldm_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_odt_pin = fpga_0_MCB3_mcbx_dram_odt_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   PORT fpga_0_MCB3_mcbx_dram_reset_n_pin = fpga_0_MCB3_mcbx_dram_reset_n_pin, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
+   
+   # Loc not needed after rzq and zip parameters are added 
+   PORT fpga_0_MCB3_rzq_pin = fpga_0_MCB3_rzq_pin, UCF_NET_STRING=( "IOSTANDARD=SSTL15_II") 
+   PORT fpga_0_MCB3_zio_pin = fpga_0_MCB3_zio_pin, UCF_NET_STRING=( "IOSTANDARD=SSTL15_II") 
+
+  # 10/100 Ethernet MAC
+  PORT PHY_RESET  = phy_rst_n,     UCF_NET_STRING=("LOC=T15", "IOSTANDARD = LVCMOS25", "TIG")
+  PORT PHY_MDINT  = phy_mii_int_n, UCF_NET_STRING=("LOC=AB2", "IOSTANDARD = LVCMOS25", "TIG")
+  PORT PHY_CRS    = phy_crs,       UCF_NET_STRING=("LOC=T14", "IOSTANDARD = LVCMOS25")
+  PORT PHY_COL    = phy_col,       UCF_NET_STRING=("LOC=R13", "IOSTANDARD = LVCMOS25")
+  PORT PHY_TXD0   = phy_tx_data_0, UCF_NET_STRING=("LOC=AA18", "IOSTANDARD = LVCMOS25")
+  PORT PHY_TXD1   = phy_tx_data_1, UCF_NET_STRING=("LOC=AB14", "IOSTANDARD = LVCMOS25")
+  PORT PHY_TXD2   = phy_tx_data_2, UCF_NET_STRING=("LOC=AA16", "IOSTANDARD = LVCMOS25")
+  PORT PHY_TXD3   = phy_tx_data_3, UCF_NET_STRING=("LOC=W14", "IOSTANDARD = LVCMOS25")
+  PORT PHY_TX_EN  = phy_tx_en,     UCF_NET_STRING=("LOC=AB16",  "IOSTANDARD = LVCMOS25")
+  PORT PHY_TX_CLK = phy_tx_clk,    UCF_NET_STRING=("LOC=W12", "IOSTANDARD = LVCMOS25")
+  PORT PHY_TX_ER  = phy_tx_er,     UCF_NET_STRING=("LOC=AB18",  "IOSTANDARD = LVCMOS25")
+  PORT PHY_RX_ER  = phy_rx_er,     UCF_NET_STRING=("LOC=Y8", "IOSTANDARD = LVCMOS25")
+  PORT PHY_RX_CLK = phy_rx_clk,    UCF_NET_STRING=("LOC=Y11", "IOSTANDARD = LVCMOS25")
+  PORT PHY_RX_DV  = phy_dv,        UCF_NET_STRING=("LOC=Y4", "IOSTANDARD = LVCMOS25")
+  PORT PHY_RXD0   = phy_rx_data_0, UCF_NET_STRING=("LOC=Y3", "IOSTANDARD = LVCMOS25")
+  PORT PHY_RXD1   = phy_rx_data_1, UCF_NET_STRING=("LOC=W8", "IOSTANDARD = LVCMOS25")
+  PORT PHY_RXD2   = phy_rx_data_2, UCF_NET_STRING=("LOC=W4", "IOSTANDARD = LVCMOS25")
+  PORT PHY_RXD3   = phy_rx_data_3, UCF_NET_STRING=("LOC=U9", "IOSTANDARD = LVCMOS25")
+  PORT PHY_MDC    = phy_mii_clk,   UCF_NET_STRING=("LOC=AA2", "IOSTANDARD = LVCMOS25")
+  PORT PHY_MDIO   = phy_mii_data,  UCF_NET_STRING=("LOC=AB3", "IOSTANDARD = LVCMOS25")
+ 
+   ### Soft_TEMAC
+   PORT fpga_0_Soft_TEMAC_TemacPhy_RST_n_pin = fpga_0_Soft_TEMAC_TemacPhy_RST_n_pin, UCF_NET_STRING=("LOC=T15", "TIG", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_RXD_0_pin_7 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_7, UCF_NET_STRING=("LOC=U6", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_RXD_0_pin_6 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_6, UCF_NET_STRING=("LOC=W9", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_RXD_0_pin_5 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_5, UCF_NET_STRING=("LOC=V5", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_RXD_0_pin_4 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_4, UCF_NET_STRING=("LOC=V7", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_RXD_0_pin_3 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_3, UCF_NET_STRING=("LOC=U9", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_RXD_0_pin_2 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_2, UCF_NET_STRING=("LOC=W4", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_RXD_0_pin_1 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_1, UCF_NET_STRING=("LOC=W8", "IOSTANDARD = LVCMOS33") 
+   PORT fpga_0_Soft_TEMAC_GMII_RXD_0_pin_0 = fpga_0_Soft_TEMAC_GMII_RXD_0_pin_0, UCF_NET_STRING=("LOC=Y3", "IOSTANDARD = LVCMOS33")
+
+   PORT fpga_0_Soft_TEMAC_GMII_TXD_0_pin_7 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_7, UCF_NET_STRING=("LOC=AA14", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_TXD_0_pin_6 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_6, UCF_NET_STRING=("LOC=V15", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_TXD_0_pin_5 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_5, UCF_NET_STRING=("LOC=Y14", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_TXD_0_pin_4 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_4, UCF_NET_STRING=("LOC=T16", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_TXD_0_pin_3 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_3, UCF_NET_STRING=("LOC=W14", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_TXD_0_pin_2 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_2, UCF_NET_STRING=("LOC=AA16", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_TXD_0_pin_1 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_1, UCF_NET_STRING=("LOC=AB14", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_TXD_0_pin_0 = fpga_0_Soft_TEMAC_GMII_TXD_0_pin_0, UCF_NET_STRING=("LOC=AA18", "IOSTANDARD = LVCMOS33")
+
+   PORT fpga_0_Soft_TEMAC_GMII_RX_DV_0_pin = fpga_0_Soft_TEMAC_GMII_RX_DV_0_pin, UCF_NET_STRING=("LOC=Y4", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_RX_ER_0_pin = fpga_0_Soft_TEMAC_GMII_RX_ER_0_pin, UCF_NET_STRING=("LOC=Y8", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_RX_CLK_0_pin = fpga_0_Soft_TEMAC_GMII_RX_CLK_0_pin, UCF_NET_STRING=("LOC=Y11", "IOSTANDARD = LVCMOS33")
+
+   PORT fpga_0_Soft_TEMAC_GMII_TX_EN_0_pin = fpga_0_Soft_TEMAC_GMII_TX_EN_0_pin, UCF_NET_STRING=("LOC=AB16", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_TX_ER_0_pin = fpga_0_Soft_TEMAC_GMII_TX_ER_0_pin, UCF_NET_STRING=("LOC=AB18", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_GMII_TX_CLK_0_pin = fpga_0_Soft_TEMAC_GMII_TX_CLK_0_pin, UCF_NET_STRING=("LOC=R11", "IOSTANDARD = LVCMOS33")
+
+   PORT fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin = fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin, UCF_NET_STRING=("LOC=W12", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_MDC_0_pin = fpga_0_Soft_TEMAC_MDC_0_pin, UCF_NET_STRING=("LOC=AA2", "IOSTANDARD = LVCMOS33")
+   PORT fpga_0_Soft_TEMAC_MDIO_0_pin = fpga_0_Soft_TEMAC_MDIO_0_pin, UCF_NET_STRING=("LOC=AB3", "IOSTANDARD = LVCMOS33")
+
+   PORT fpga_0_Soft_TEMAC_MDINT_pin = fpga_0_Soft_TEMAC_MDINT_pin, UCF_NET_STRING=("LOC=AB2", "IOSTANDARD = LVCMOS33")
+
+  ### ONE Wire ### 
+  PORT onewire_master_0_DQ_Wire = onewire_master_0_DQ_Wire, UCF_NET_STRING = ("LOC = T11", "IOSTANDARD=LVCMOS25") #IO_L40N_2/NC
+
+END
+

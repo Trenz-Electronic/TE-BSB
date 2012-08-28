@@ -1,0 +1,5 @@
+#PLL placement
+#necesarry for LX100 and LX150 devices
+INST "clock_generator_0/clock_generator_0/PLL0_INST/Using_PLL_ADV.PLL_ADV_inst" LOC = "PLL_ADV_X0Y2";
+#necesarry for LX45 devices
+#INST "clock_generator_0/clock_generator_0/PLL0_INST/Using_PLL_ADV.PLL_ADV_inst" LOC = "PLL_ADV_X0Y1";
