@@ -124,18 +124,18 @@ BEGIN IO_INTERFACE
   PORT fpga_0_LED_GPIO_d_out_pin_4 = fpga_0_LED_GPIO_d_out_4, IO_IS = gpio_io[4]
 END
 
-#BEGIN IO_INTERFACE
-#  ATTRIBUTE INSTANCE = Push_Buttons_4Bit
-#  ATTRIBUTE IOTYPE = XIL_GPIO_V1
-#  PARAMETER C_GPIO_WIDTH = 4, IO_IS = num_bits
-#  PARAMETER C_IS_DUAL = 0, IO_IS = is_dual
-#  PARAMETER C_IS_BIDIR = 1, IO_IS = is_bidir
-#  PARAMETER C_ALL_INPUTS = 1, IO_IS = all_inputs
-#  PORT Push_Buttons_4Bit_GPIO_IO0 = Push_Buttons_4Bit_GPIO_IO_0, IO_IS = gpio_io[0]
+BEGIN IO_INTERFACE
+  ATTRIBUTE INSTANCE = Push_Button_INIT
+  ATTRIBUTE IOTYPE = XIL_GPIO_V1
+  PARAMETER C_GPIO_WIDTH = 1, IO_IS = num_bits
+  PARAMETER C_IS_DUAL = 0, IO_IS = is_dual
+  PARAMETER C_IS_BIDIR = 1, IO_IS = is_bidir
+  PARAMETER C_ALL_INPUTS = 1, IO_IS = all_inputs
+  PORT Push_Buttons_4Bit_GPIO_INIT = Push_Buttons_4Bit_GPIO_INIT, IO_IS = gpio_io[0]
 #  PORT Push_Buttons_4Bit_GPIO_IO1 = Push_Buttons_4Bit_GPIO_IO_1, IO_IS = gpio_io[1]
 #  PORT Push_Buttons_4Bit_GPIO_IO2 = Push_Buttons_4Bit_GPIO_IO_2, IO_IS = gpio_io[2]
 #  PORT Push_Buttons_4Bit_GPIO_IO3 = Push_Buttons_4Bit_GPIO_IO_3, IO_IS = gpio_io[3]
-#END
+END
 
                                                                                 
 #BEGIN IO_INTERFACE
@@ -402,9 +402,9 @@ BEGIN IO_INTERFACE
   PARAMETER C_NUM_SS_BITS = 1, IO_IS = ss_bits
   PARAMETER C_NUM_TRANSFER_BITS = 8, IO_IS = num_transfer_bits
   PORT SCK = fpga_0_SPI_FLASH_SCK_pin,  IO_IS = clk_out
-  PORT SI  = fpga_0_SPI_FLASH_MOSI_pin, IO_IS = data_out
-  PORT SO  = fpga_0_SPI_FLASH_MISO_pin, IO_IS = data_in
-  PORT CS  = fpga_0_SPI_FLASH_SS_pin,   IO_IS = slave_select[0]
+  PORT SI  = fpga_0_SPI_FLASH_MOSI_pin, IO_IS = data_in
+  PORT SO  = fpga_0_SPI_FLASH_MISO_pin, IO_IS = data_out
+  PORT CS  = fpga_0_SPI_FLASH_SS_pin,   IO_IS = chip_select[0]
   PORT SPISEL = net_vcc, IO_IS = slave_select_n
 END
 
@@ -417,11 +417,11 @@ BEGIN IO_INTERFACE
    PARAMETER C_NUM_TRANSFER_BITS = 8, IO_IS = num_transfer_bits
 
    PORT SPISEL= net_vcc, IO_IS=slave_select_n
-   PORT MISO=socket_MicroSD_DAT0MISO, IO_IS=data_in
-   PORT MOSI=socket_MicroSD_CMDMOSI, IO_IS=data_out
+   PORT MISO=socket_MicroSD_DAT0MISO, IO_IS=data_out
+   PORT MOSI=socket_MicroSD_CMDMOSI, IO_IS=data_in
    PORT SCK=socket_MicroSD_CLKSCK, IO_IS=clk_out
-   PORT SS0=socket_MicroSD_CDCSDAT3_0, IO_IS=slave_select[0]
-   PORT SS1=socket_MicroSD_CDCSDAT3_1, IO_IS=slave_select[1]
+   PORT SS0=socket_MicroSD_CDCSDAT3_0, IO_IS=chip_select[0]
+   PORT SS1=socket_MicroSD_CDCSDAT3_1, IO_IS=chip_select[1]
 END
 
 # ONE WIRE
@@ -429,7 +429,7 @@ BEGIN IO_INTERFACE
   ATTRIBUTE IOTYPE = XIL_ONEWIRE_V1
   ATTRIBUTE INSTANCE = plb_singlewire_0
   ATTRIBUTE CORENAME = plb_onewire
-  PORT DQ_Wire = s3e_onewire_master_0_DQ_Wire,  IO_IS = dq_wire
+  PORT DQ_Wire = onewire_master_0_DQ_Wire,  IO_IS = dq_wire
 END
 
 BEGIN FPGA
@@ -439,8 +439,8 @@ BEGIN FPGA
   ATTRIBUTE PACKAGE = fgg484
   ATTRIBUTE SPEED_GRADE = -2
   ATTRIBUTE JTAG_POSITION = 2 
-  PORT fpga_0_clk_125_sys_clk_pin = dcm_clk_s, UCF_NET_STRING = ("TNM_NET = sys_clk_pin", "LOC = AA12", "IOSTANDARD=LVCMOS15")
-  PORT fpga_0_sys_rst_pin = sys_rst_s, UCF_NET_STRING = ("LOC = W22", "IOSTANDARD=LVCMOS15", "PULLDOWN", "TIG")
+  PORT fpga_0_clk_125_sys_clk_pin = dcm_clk_s, UCF_NET_STRING = ("TNM_NET = fpga_0_clk_125_sys_clk_pin", "LOC = AA12", "IOSTANDARD=LVCMOS15")
+  PORT fpga_0_sys_rst_pin = sys_rst_s, UCF_NET_STRING = ("LOC = B2", "IOSTANDARD=LVCMOS15", "PULLDOWN", "TIG")
 
   ### RS232 ###
   PORT fpga_0_RS232_RX_pin = fpga_0_RS232_RX_pin, UCF_NET_STRING = ("LOC = C17", "IOSTANDARD=LVCMOS33")
@@ -456,8 +456,8 @@ BEGIN FPGA
   PORT fpga_0_LED_GPIO_d_out_pin_3 = fpga_0_LED_GPIO_d_out_3, UCF_NET_STRING = ("LOC = T4", "IOSTANDARD=LVCMOS15")
   PORT fpga_0_LED_GPIO_d_out_pin_4 = fpga_0_LED_GPIO_d_out_4, UCF_NET_STRING = ("LOC = T3", "IOSTANDARD=LVCMOS15")
 
-  ### PUSH BUTTON 4 BIT ###
-#  PORT Push_Buttons_4Bit_GPIO_IO0 = Push_Buttons_4Bit_GPIO_IO_0, UCF_NET_STRING = ("LOC = F3", "IOSTANDARD=LVCMOS15")
+  ### PUSH BUTTON INIT ###
+  PORT Push_Buttons_4Bit_GPIO_INIT = Push_Buttons_4Bit_GPIO_INIT, UCF_NET_STRING = ("LOC = T6", "IOSTANDARD=LVCMOS25")
 #  PORT Push_Buttons_4Bit_GPIO_IO1 = Push_Buttons_4Bit_GPIO_IO_1, UCF_NET_STRING = ("LOC = G6", "IOSTANDARD=LVCMOS15")
 #  PORT Push_Buttons_4Bit_GPIO_IO2 = Push_Buttons_4Bit_GPIO_IO_2, UCF_NET_STRING = ("LOC = F5", "IOSTANDARD=LVCMOS15")
 #  PORT Push_Buttons_4Bit_GPIO_IO3 = Push_Buttons_4Bit_GPIO_IO_3, UCF_NET_STRING = ("LOC = C1", "IOSTANDARD=LVCMOS15")
@@ -650,6 +650,8 @@ BEGIN FPGA
 
    PORT fpga_0_Soft_TEMAC_MDINT_pin = fpga_0_Soft_TEMAC_MDINT_pin, UCF_NET_STRING=("LOC=AB2", "IOSTANDARD = LVCMOS33")
 
+  ### ONE Wire ### 
+  PORT onewire_master_0_DQ_Wire = onewire_master_0_DQ_Wire, UCF_NET_STRING = ("LOC = T11", "IOSTANDARD=LVCMOS25") #IO_L40N_2/NC
 
 END
 
