@@ -1,4 +1,4 @@
 ### Set Vccaux for S6LX150 MicroBoard to 3.3V ###
 CONFIG VCCAUX = "3.3" ;
 ### Set Vcco for S6LX150 MicroBoard to 1.5V ###
-CONFIG VCCO = "1.5" ;
+#CONFIG VCCO = "1.5" ;
