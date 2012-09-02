@@ -66,12 +66,12 @@
 #	
 # -------------------------------------------------------------
 ATTRIBUTE VENDOR = Trenz
-ATTRIBUTE NAME = Spartan-6 LX FPGA micromodule LX45 with carrier board
+ATTRIBUTE NAME = Trenz Electronic GigaBee XC6SLX45
 ATTRIBUTE REVISION = 1
 ATTRIBUTE SPEC_URL = http://www.trenz-electronic.de/products/fpga-boards/trenz-electronic/gigabee-xc6slx.html
 ATTRIBUTE CONTACT_INFO_URL = http://www.trenz-electronic.de/meta-navigation/imprint-disclaimer.html
-ATTRIBUTE DESC = Industrial-grade Xilinx Spartan-6 LX FPGA micromodule LX45 with carrier board
-ATTRIBUTE LONG_DESC =  'Trenz Electronic GigaBee XC6SLX series are industrial-grade FPGA micromodules integrating a leading-edge Xilinx Spartan-6 LX FPGA, gigabit Ethernet transceiver (physical layer), two independent banks of 16-bit-wide 128 MByte DDR3 SDRAM, 8 Mbyte SPI Flash memory for configuration and operation, and powerful switch-mode power supplies for all on-board voltages. A large number of configurable I/Os is provided via robust board-to-board (B2B) connectors. Placed on TE0603 carrier board.'
+ATTRIBUTE DESC = Industrial-grade Xilinx Spartan-6 LX FPGA micromodule LX45
+ATTRIBUTE LONG_DESC =  'Trenz Electronic GigaBee XC6SLX series are industrial-grade FPGA micromodules integrating a leading-edge Xilinx Spartan-6 LX FPGA, gigabit Ethernet transceiver (physical layer), two independent banks of 16-bit-wide 128 MByte DDR3 SDRAM, 8 Mbyte SPI Flash memory for configuration and operation, and powerful switch-mode power supplies for all on-board voltages. A large number of configurable I/Os is provided via robust board-to-board (B2B) connectors.'
 
 BEGIN IO_INTERFACE
   ATTRIBUTE INSTANCE = clock_generator_0
@@ -394,7 +394,7 @@ BEGIN IO_INTERFACE
   ATTRIBUTE IOTYPE = XIL_SPI_V1
   ATTRIBUTE INSTANCE = SPI_FLASH
   ATTRIBUTE EXCLUSIVE = FLASH
-  PARAMETER C_SCK_RATIO = 16, IO_IS = clk_freq
+  PARAMETER C_SCK_RATIO = 256, IO_IS = clk_freq
   PARAMETER C_NUM_SS_BITS = 1, IO_IS = ss_bits
   PARAMETER C_NUM_TRANSFER_BITS = 8, IO_IS = num_transfer_bits
   PORT SCK = fpga_0_SPI_FLASH_SCK_pin,  IO_IS = clk_out
@@ -402,22 +402,6 @@ BEGIN IO_INTERFACE
   PORT SO  = fpga_0_SPI_FLASH_MISO_pin, IO_IS = data_out
   PORT CS  = fpga_0_SPI_FLASH_SS_pin,   IO_IS = chip_select[0]
   PORT SPISEL = net_vcc, IO_IS = slave_select_n
-END
-
-BEGIN IO_INTERFACE
-   ATTRIBUTE IOTYPE = XIL_SPI_V1
-   ATTRIBUTE INSTANCE = SPI_microSD
-   PARAMETER C_NUM_SS_BITS=2, IO_IS=ss_bits
-# Set SPI clock rate between 100kHz and 400kHz   
-   PARAMETER C_SCK_RATIO = 256, IO_IS = clk_freq
-   PARAMETER C_NUM_TRANSFER_BITS = 8, IO_IS = num_transfer_bits
-
-   PORT SPISEL= net_vcc, IO_IS=slave_select_n
-   PORT MISO=socket_MicroSD_DAT0MISO, IO_IS=data_out
-   PORT MOSI=socket_MicroSD_CMDMOSI, IO_IS=data_in
-   PORT SCK=socket_MicroSD_CLKSCK, IO_IS=clk_out
-   PORT SS0=socket_MicroSD_CDCSDAT3_0, IO_IS=chip_select[0]
-   PORT SS1=socket_MicroSD_CDCSDAT3_1, IO_IS=chip_select[1]
 END
 
 # ONE WIRE
@@ -468,15 +452,6 @@ BEGIN FPGA
    PORT fpga_0_SPI_FLASH_MOSI_pin = fpga_0_SPI_FLASH_MOSI_pin, UCF_NET_STRING=("LOC=AB20",  "IOSTANDARD = LVCMOS25")
    PORT fpga_0_SPI_FLASH_MISO_pin = fpga_0_SPI_FLASH_MISO_pin, UCF_NET_STRING=("LOC=AA20",  "IOSTANDARD = LVCMOS25")
    PORT fpga_0_SPI_FLASH_SS_pin = fpga_0_SPI_FLASH_SS_pin,   UCF_NET_STRING=("LOC=T5", "IOSTANDARD = LVCMOS25")
-
-   ### SPI microSD
-   PORT socket_MicroSD_DAT0MISO = socket_MicroSD_DAT0MISO, UCF_NET_STRING=("LOC=AA21", "IOSTANDARD=LVCMOS25") #B2B_B2_L2_P
-   PORT socket_MicroSD_CMDMOSI = socket_MicroSD_CMDMOSI, UCF_NET_STRING=("LOC=AB11", "IOSTANDARD=LVCMOS25") #B2B_B2_L32_N
-   PORT socket_MicroSD_CLKSCK = socket_MicroSD_CLKSCK,   UCF_NET_STRING=("LOC=Y12", "IOSTANDARD=LVCMOS25") #B2B_B2_L29_N
-   PORT socket_MicroSD_CDCSDAT3_0 = socket_MicroSD_CDCSDAT3_0, UCF_NET_STRING=("LOC=V11", "IOSTANDARD=LVCMOS25") #B2B_B2_L42_P
-#  PORT socket_MicroSD_CDCSDAT3_1 = socket_MicroSD_CDCSDAT3_1, UCF_NET_STRING=("LOC=V3", "IOSTANDARD=LVCMOS25")
-#  PORT socket_MicroSD_DAT1 = socket_MicroSD_DAT1, UCF_NET_STRING=("LOC=AB21", "IOSTANDARD=LVCMOS25") #B2B_B2_L2_N
-#  PORT socket_MicroSD_DAT2 = socket_MicroSD_DAT2, UCF_NET_STRING=("LOC=W11", "IOSTANDARD=LVCMOS25") #B2B_B2_L42_N
 
    ### MCB1_DDR3
    PORT fpga_0_MCB1_mcbx_dram_addr_pin_0 = fpga_0_MCB1_mcbx_dram_addr_pin_0, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")

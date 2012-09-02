@@ -1,0 +1,2 @@
+### Set Vccaux for S6LX45 MicroBoard to 3.3V ###
+CONFIG VCCAUX = "3.3" ;

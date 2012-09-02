@@ -117,11 +117,11 @@ BEGIN IO_INTERFACE
   PARAMETER C_IS_BIDIR = 0, IO_IS = is_bidir
   PARAMETER C_ALL_INPUTS = 0, IO_IS = all_inputs
   
-  PORT fpga_0_LED_GPIO_d_out_pin_0 = fpga_0_LED_GPIO_d_out_0, IO_IS = gpio_io[0]
-  PORT fpga_0_LED_GPIO_d_out_pin_1 = fpga_0_LED_GPIO_d_out_1, IO_IS = gpio_io[1]
-  PORT fpga_0_LED_GPIO_d_out_pin_2 = fpga_0_LED_GPIO_d_out_2, IO_IS = gpio_io[2]
-  PORT fpga_0_LED_GPIO_d_out_pin_3 = fpga_0_LED_GPIO_d_out_3, IO_IS = gpio_io[3]
-  PORT fpga_0_LED_GPIO_d_out_pin_4 = fpga_0_LED_GPIO_d_out_4, IO_IS = gpio_io[4]
+  PORT fpga_0_LED_GPIO_d_out_pin_0 = fpga_0_LED_GPIO_d_out_0, IO_IS = gpio_data_out[0]
+  PORT fpga_0_LED_GPIO_d_out_pin_1 = fpga_0_LED_GPIO_d_out_1, IO_IS = gpio_data_out[1]
+  PORT fpga_0_LED_GPIO_d_out_pin_2 = fpga_0_LED_GPIO_d_out_2, IO_IS = gpio_data_out[2]
+  PORT fpga_0_LED_GPIO_d_out_pin_3 = fpga_0_LED_GPIO_d_out_3, IO_IS = gpio_data_out[3]
+  PORT fpga_0_LED_GPIO_d_out_pin_4 = fpga_0_LED_GPIO_d_out_4, IO_IS = gpio_data_out[4]
 END
 
 BEGIN IO_INTERFACE
@@ -129,12 +129,9 @@ BEGIN IO_INTERFACE
   ATTRIBUTE IOTYPE = XIL_GPIO_V1
   PARAMETER C_GPIO_WIDTH = 1, IO_IS = num_bits
   PARAMETER C_IS_DUAL = 0, IO_IS = is_dual
-  PARAMETER C_IS_BIDIR = 1, IO_IS = is_bidir
   PARAMETER C_ALL_INPUTS = 1, IO_IS = all_inputs
-  PORT Push_Buttons_4Bit_GPIO_INIT = Push_Buttons_4Bit_GPIO_INIT, IO_IS = gpio_io[0]
-#  PORT Push_Buttons_4Bit_GPIO_IO1 = Push_Buttons_4Bit_GPIO_IO_1, IO_IS = gpio_io[1]
-#  PORT Push_Buttons_4Bit_GPIO_IO2 = Push_Buttons_4Bit_GPIO_IO_2, IO_IS = gpio_io[2]
-#  PORT Push_Buttons_4Bit_GPIO_IO3 = Push_Buttons_4Bit_GPIO_IO_3, IO_IS = gpio_io[3]
+  PORT Push_Button_GPIO_INIT_0 = Push_Button_GPIO_INIT_0, IO_IS = gpio_data_in[0]
+  PORT Push_Button_GPIO_INIT_1 = Push_Button_GPIO_INIT_1, IO_IS = gpio_data_in[0]
 END
 
                                                                                 
@@ -143,12 +140,11 @@ END
 #  ATTRIBUTE IOTYPE = XIL_GPIO_V1
 #  PARAMETER C_GPIO_WIDTH = 4, IO_IS = num_bits
 #  PARAMETER C_IS_DUAL = 0, IO_IS = is_dual
-#  PARAMETER C_IS_BIDIR = 1, IO_IS = is_bidir
 #  PARAMETER C_ALL_INPUTS = 1, IO_IS = all_inputs
-#  PORT DIP_Switches_4Bit_GPIO_IO_0 = DIP_Switches_4Bit_GPIO_IO_0, IO_IS = gpio_io[0]
-#  PORT DIP_Switches_4Bit_GPIO_IO_1 = DIP_Switches_4Bit_GPIO_IO_1, IO_IS = gpio_io[1]
-#  PORT DIP_Switches_4Bit_GPIO_IO_2 = DIP_Switches_4Bit_GPIO_IO_2, IO_IS = gpio_io[2]
-#  PORT DIP_Switches_4Bit_GPIO_IO_3 = DIP_Switches_4Bit_GPIO_IO_3, IO_IS = gpio_io[3]
+#  PORT DIP_Switches_4Bit_GPIO_IO_0 = DIP_Switches_4Bit_GPIO_IO_0, IO_IS = gpio_data_in[0]
+#  PORT DIP_Switches_4Bit_GPIO_IO_1 = DIP_Switches_4Bit_GPIO_IO_1, IO_IS = gpio_data_in[1]
+#  PORT DIP_Switches_4Bit_GPIO_IO_2 = DIP_Switches_4Bit_GPIO_IO_2, IO_IS = gpio_data_in[2]
+#  PORT DIP_Switches_4Bit_GPIO_IO_3 = DIP_Switches_4Bit_GPIO_IO_3, IO_IS = gpio_data_in[3]
 #END
 
 
@@ -441,10 +437,7 @@ BEGIN FPGA
   PORT fpga_0_LED_GPIO_d_out_pin_4 = fpga_0_LED_GPIO_d_out_4, UCF_NET_STRING = ("LOC = T3", "IOSTANDARD=LVCMOS15")
 
   ### PUSH BUTTON INIT ###
-  PORT Push_Buttons_4Bit_GPIO_INIT = Push_Buttons_4Bit_GPIO_INIT, UCF_NET_STRING = ("LOC = T6", "IOSTANDARD=LVCMOS25")
-#  PORT Push_Buttons_4Bit_GPIO_IO1 = Push_Buttons_4Bit_GPIO_IO_1, UCF_NET_STRING = ("LOC = G6", "IOSTANDARD=LVCMOS15")
-#  PORT Push_Buttons_4Bit_GPIO_IO2 = Push_Buttons_4Bit_GPIO_IO_2, UCF_NET_STRING = ("LOC = F5", "IOSTANDARD=LVCMOS15")
-#  PORT Push_Buttons_4Bit_GPIO_IO3 = Push_Buttons_4Bit_GPIO_IO_3, UCF_NET_STRING = ("LOC = C1", "IOSTANDARD=LVCMOS15")
+  PORT Push_Button_GPIO_INIT_0 = Push_Button_GPIO_INIT_0, UCF_NET_STRING = ("LOC = T6", "IOSTANDARD=LVCMOS25")
 
 # DIP
 #  PORT DIP_Switches_4Bit_GPIO_IO_0 = DIP_Switches_4Bit_GPIO_IO_0, UCF_NET_STRING=("LOC=C18", "IOSTANDARD=LVCMOS25")
