@@ -400,7 +400,8 @@ BEGIN IO_INTERFACE
   PORT SCK = fpga_0_SPI_FLASH_SCK_pin,  IO_IS = clk_out
   PORT SI  = fpga_0_SPI_FLASH_MOSI_pin, IO_IS = data_in
   PORT SO  = fpga_0_SPI_FLASH_MISO_pin, IO_IS = data_out
-  PORT CS  = fpga_0_SPI_FLASH_SS_pin,   IO_IS = chip_select[0]
+  PORT CS0  = fpga_0_SPI_FLASH_SS_0,   IO_IS = chip_select[0]
+  PORT CS0  = fpga_0_SPI_FLASH_SS_1,   IO_IS = chip_select[0]
   PORT SPISEL = net_vcc, IO_IS = slave_select_n
 END
 
@@ -460,14 +461,12 @@ BEGIN FPGA
 #  PORT DIP_Switches_4Bit_GPIO_IO_1 = DIP_Switches_4Bit_GPIO_IO_1, UCF_NET_STRING=("LOC=Y6", "IOSTANDARD=LVCMOS25")
 #  PORT DIP_Switches_4Bit_GPIO_IO_2 = DIP_Switches_4Bit_GPIO_IO_2, UCF_NET_STRING=("LOC=W6", "IOSTANDARD=LVCMOS25")
 #  PORT DIP_Switches_4Bit_GPIO_IO_3 = DIP_Switches_4Bit_GPIO_IO_3, UCF_NET_STRING=("LOC=E4", "IOSTANDARD=LVCMOS15")
-                                                                                                                                                             
-
 
    ### SPI FLASH
    PORT fpga_0_SPI_FLASH_SCK_pin = fpga_0_SPI_FLASH_SCK_pin,  UCF_NET_STRING=("LOC=Y21",  "IOSTANDARD = LVCMOS25")
    PORT fpga_0_SPI_FLASH_MOSI_pin = fpga_0_SPI_FLASH_MOSI_pin, UCF_NET_STRING=("LOC=AB20",  "IOSTANDARD = LVCMOS25")
    PORT fpga_0_SPI_FLASH_MISO_pin = fpga_0_SPI_FLASH_MISO_pin, UCF_NET_STRING=("LOC=AA20",  "IOSTANDARD = LVCMOS25")
-   PORT fpga_0_SPI_FLASH_SS_pin = fpga_0_SPI_FLASH_SS_pin,   UCF_NET_STRING=("LOC=T5", "IOSTANDARD = LVCMOS25")
+   PORT fpga_0_SPI_FLASH_SS_pin = fpga_0_SPI_FLASH_SS_0,   UCF_NET_STRING=("LOC=T5", "IOSTANDARD = LVCMOS25")
 
    ### SPI microSD
    PORT socket_MicroSD_DAT0MISO = socket_MicroSD_DAT0MISO, UCF_NET_STRING=("LOC=AA21", "IOSTANDARD=LVCMOS25") #B2B_B2_L2_P
@@ -530,8 +529,7 @@ BEGIN FPGA
    
    # Loc not needed after rzq and zip parameters are added 
    PORT fpga_0_MCB1_rzq_pin = fpga_0_MCB1_rzq_pin, UCF_NET_STRING=( "IOSTANDARD=SSTL15_II") 
-   PORT fpga_0_MCB1_zio_pin = fpga_0_MCB1_zio_pin, UCF_NET_STRING=( "IOSTANDARD=SSTL15_II") 
-   
+   PORT fpga_0_MCB1_zio_pin = fpga_0_MCB1_zio_pin, UCF_NET_STRING=( "IOSTANDARD=SSTL15_II")  
 
    ### MCB3_DDR3
    PORT fpga_0_MCB3_mcbx_dram_addr_pin_0 = fpga_0_MCB3_mcbx_dram_addr_pin_0, UCF_NET_STRING=("IOSTANDARD = SSTL15_II")
