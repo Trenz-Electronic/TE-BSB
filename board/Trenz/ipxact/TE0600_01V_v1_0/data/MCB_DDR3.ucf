@@ -1,0 +1,64 @@
+### Set Vccaux for S6LX150 MicroBoard to 3.3V ###
+CONFIG VCCAUX = "3.3" ;
+### Set Vcco for S6LX150 MicroBoard to 1.5V ###
+#CONFIG VCCO = "1.5" ;
+############################################################################
+# Extended MCB performance mode requires a different Vccint specification to
+# achieve higher maximum frequencies for DDR2 and DDR3.Consult the Spartan-6
+#datasheet (DS162) table 2 and 24 for more information 
+############################################################################
+#CONFIG MCB_PERFORMANCE= STANDARD;
+
+
+##################################################################################
+# Timing Ignore constraints for paths crossing the clock domain 
+##################################################################################
+#NET "*/mcb_raw_wrapper_inst/selfrefresh_mcb_mode"  TIG;
+     
+
+############################################################################
+## Memory Controller 3                               
+## Memory Device: DDR3_SDRAM->MT41J64M16XX-187E 
+## Frequency: 333.333 MHz
+## Time Period: 3000 ps
+## Supported Part Numbers: MT41J64M16LA-187E
+############################################################################
+
+############################################################################
+## Clock constraints                                                        
+############################################################################
+############################################################################
+
+############################################################################
+## I/O TERMINATION                                                          
+############################################################################
+#NET "mcbx_dram_dq[*]"                                 IN_TERM = NONE;
+#NET "mcbx_dram_dqs"                                   IN_TERM = NONE;
+#NET "mcbx_dram_dqs_n"                                 IN_TERM = NONE;
+#NET "mcbx_dram_udqs"                                  IN_TERM = NONE;
+#NET "mcbx_dram_udqs_n"                                IN_TERM = NONE;
+
+############################################################################
+# I/O STANDARDS 
+############################################################################
+
+#NET  "mcbx_dram_dq[*]"                               IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_addr[*]"                             IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_ba[*]"                               IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_dqs"                                 IOSTANDARD = DIFF_SSTL15_II;
+#NET  "mcbx_dram_udqs"                                IOSTANDARD = DIFF_SSTL15_II;
+#NET  "mcbx_dram_dqs_n"                               IOSTANDARD = DIFF_SSTL15_II;
+#NET  "mcbx_dram_udqs_n"                              IOSTANDARD = DIFF_SSTL15_II;
+#NET  "mcbx_dram_clk"                                 IOSTANDARD = DIFF_SSTL15_II;
+#NET  "mcbx_dram_clk_n"                               IOSTANDARD = DIFF_SSTL15_II;
+#NET  "mcbx_dram_cke"                                 IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_ras_n"                               IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_cas_n"                               IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_we_n"                                IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_odt"                                 IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_ddr3_rst"                            IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_ldm"                                 IOSTANDARD = SSTL15_II;
+#NET  "mcbx_dram_udm"                                 IOSTANDARD = SSTL15_II;
+#NET  "rzq"                                           IOSTANDARD = SSTL15_II;
+#NET  "zio"                                           IOSTANDARD = SSTL15_II;
+

@@ -1,0 +1,236 @@
+
+
+###### ETHERNET
+# This is a GMII system
+# AXI_STR_*_ACLK is not the same as S_AXI_ACLK from clock generator
+# Rx/Tx Client clocks are Rx/Tx PHY clocks so CORE Gen PHY clock constraints propagate to Rx/Tx client clock periods
+# Time domain crossing constraints (DATAPATHONLY) are set for maximum bus frequency
+# allowed by IP which is the maximum option in BSB. For lower bus frequency choice in BSB,
+# the constraints are over constrained. Relaxing them for your system may reduce build time.
+
+NET "*ETHERNET*/S_AXI_ACLK" TNM_NET = "axi4lite_clk";  
+NET "*ETHERNET*/AXI_STR_TXD_ACLK" TNM_NET = "axistream_clk"; 
+NET "*ETHERNET*/AXI_STR_TXC_ACLK" TNM_NET = "axistream_clk"; 
+NET "*ETHERNET*/AXI_STR_RXD_ACLK" TNM_NET = "axistream_clk"; 
+NET "*ETHERNET*/AXI_STR_RXS_ACLK" TNM_NET = "axistream_clk"; 
+
+############################################################
+# Clock Period Constraints                                 #
+############################################################
+
+############################################################
+# RX Clock period Constraints                              #
+############################################################
+# Receiver clock period constraints: please do not relax
+# Changed NET name
+# NET "*/rx_gmii_clk_int" TNM_NET  = "clk_rx";
+NET "*/GMII_RX_CLK" TNM_NET = "clk_rx";
+# Added TIMEGRP for later DATAPATHONLY constraint
+TIMEGRP "rx_clock" = "clk_rx";
+TIMESPEC "TS_rx_clk" = PERIOD "rx_clock" 8000 ps HIGH 50 %;
+
+############################################################
+# TX Clock period Constraints                              #
+############################################################
+# Transmitter clock period constraints: please do not relax
+# Changed NET name
+# NET "gtx_clk*" TNM_NET  = "clk_gtx";
+NET "*/GTX_CLK" TNM_NET  = "clk_gtx";
+# Added TIMEGRP for later DATAPATHONLY constraint
+TIMEGRP "gtx_clock" = "clk_gtx";
+TIMESPEC "TS_gtx_clk" = PERIOD "gtx_clock" 8000 ps HIGH 50 %;
+
+# Changed NET name
+# NET "*tx_gmii_clk" TNM_NET = "clk_tx_gmii";
+NET "*/GTX_CLK" TNM_NET = "clk_tx_gmii";
+TIMEGRP "tx_clock_gmii" = "clk_tx_gmii";
+TIMESPEC "TS_tx_clk_gmii" = PERIOD "tx_clock_gmii" 8000 ps HIGH 50 %;
+                                                                        
+############################################################
+# Host Clock period Constraint                             #
+############################################################
+# Management Clock period constraints: relax as required
+# Changed NET name
+# NET "host_clk"                   TNM_NET  = "host";
+NET "*/S_AXI_ACLK" TNM_NET = "host_clk";
+TIMEGRP "host" = "host_clk" EXCEPT "mdio_logic";
+TIMESPEC "TS_host_clk" = PERIOD "host" 15000 ps HIGH 50 % PRIORITY 10;
+
+############################################################
+# External GMII Constraints                                #
+############################################################
+# GMII Transmitter Constraints:  place flip-flops in IOB
+# Changed 'true' to 'force'
+# Shortened INST names to remove internal hierarchy
+INST "*gmii_txd*" IOB = force;
+INST "*gmii_tx_en" IOB = force;
+INST "*gmii_tx_er" IOB = force;
+
+# GMII Receiver Constraints:  place flip-flops in IOB
+# Changed 'true' to 'force'
+# Shortened INST names to remove internal hierarchy
+INST "*rxd_to_mac*" IOB = force;
+INST "*rx_dv_to_mac" IOB = force;
+INST "*rx_er_to_mac" IOB = force;
+
+############################################################
+# For Setup and Hold time analysis on GMII inputs          #
+############################################################
+# Identify GMII Rx Pads only.  
+# This prevents setup/hold analysis being performed on false inputs,
+# eg, the configuration_vector inputs.
+# Changed to remove TNM and changed INST Names
+# INST "gmii_rxd<?>" TNM = IN_GMII; 
+# INST "gmii_rx_er" TNM = IN_GMII;
+# INST "gmii_rx_dv" TNM = IN_GMII;
+
+# Define data valid window with respect to the clock.
+# The spec states that, worst case, the data is valid 2 ns before the clock edge.
+# The worst case it to provide zero hold time (a 2ns window in total)
+# Changed to remove TIMEGRP 
+# TIMEGRP "IN_GMII" OFFSET = IN  2 ns VALID 2 ns BEFORE "gmii_rx_clk"; 
+# Set to allow for 100ps setup/hold trace delay difference in relation to clock
+OFFSET = IN  2.4 ns VALID 2.8 ns BEFORE "ETHERNET_RX_CLK"; 
+
+############################################################
+# The following are required to maximize setup/hold        #
+############################################################
+# Changed to add Drive strength and INST Name
+INST "ETHERNET_TXD_?_OBUF" SLEW = FAST;
+INST "ETHERNET_TX_EN_OBUF" SLEW = FAST;
+INST "ETHERNET_TX_ER_OBUF" SLEW = FAST;
+INST "ETHERNET_TX_CLK_OBUF" SLEW = FAST;
+
+############################################################
+# GMII: IODELAY Constraints
+############################################################
+# Please modify the value of the IDELAY_VALUE
+# according to your design.
+# For more information on IDELAYCTRL and IODELAY, please
+# refer to the Spartan-6 User Guide.
+#
+INST "*delay_gmii_rx_dv" IDELAY_VALUE = 37;
+INST "*delay_gmii_rx_er" IDELAY_VALUE = 37;
+INST "*data_bus[0].delay_gmii_rxd" IDELAY_VALUE = 37;
+INST "*data_bus[1].delay_gmii_rxd" IDELAY_VALUE = 37;
+INST "*data_bus[2].delay_gmii_rxd" IDELAY_VALUE = 37;
+INST "*data_bus[3].delay_gmii_rxd" IDELAY_VALUE = 37;
+INST "*data_bus[4].delay_gmii_rxd" IDELAY_VALUE = 37;
+INST "*data_bus[5].delay_gmii_rxd" IDELAY_VALUE = 37;
+INST "*data_bus[6].delay_gmii_rxd" IDELAY_VALUE = 37;
+INST "*data_bus[7].delay_gmii_rxd" IDELAY_VALUE = 37;
+
+# Group IODELAY and IDELAYCTRL components to aid placement
+# INST "*delay_gmii_rx_clk" IODELAY_GROUP = "grp1";
+INST "*delay_gmii_rx_dv" IODELAY_GROUP = "grp1";
+INST "*delay_gmii_rx_er" IODELAY_GROUP = "grp1";
+INST "*delay_gmii_rxd" IODELAY_GROUP = "grp1";
+# INST "*dlyctrl" IODELAY_GROUP = "grp1";
+
+# Changed to let the tools pick the LOC
+# INST *trimac_block*clock_inst*BUFGMUX_SPEED_CLK LOC = BUFGMUX_X3Y13;
+
+############################################################
+# Ignore paths to resync flops
+############################################################
+# Changed to replace TIG with DATAPATHONLY constraints
+# INST "*data_sync" TNM = "resync_reg";
+# TIMESPEC "ts_resync_flops" = TO "resync_reg" TIG;
+
+############################################################
+# MDIO Constraints: please do not edit                     #
+############################################################
+
+# Place the MDIO logic in it's own timing groups
+# Changed net name in synthesis of axi_ethernet
+INST "*/I_RXGEN/ENABLE_REG" TNM = "mdio_logic";
+INST "*/MANIFGEN.I_MANAGEN/MIIM_READY_INT" TNM = "mdio_logic";
+INST "*/MANIFGEN.I_MANAGEN/I_PHY/STATE_COUNT*" TNM = FFS "mdio_logic";
+INST "*/MANIFGEN.I_MANAGEN/I_PHY/MDIO_TRISTATE" TNM = "mdio_logic";
+INST "*/MANIFGEN.I_MANAGEN/I_PHY/MDIO_OUT" TNM = "mdio_logic";
+
+# The MDIO logic is constrained to a 400ns period.  this is generated by relating the required
+# period to that specified for host_clk.  This ensures the two clocks are related timed
+# correctly.
+TIMESPEC "TS_mdio" = PERIOD "mdio_logic" "TS_host_clk" * 40 PRIORITY 0;
+
+############################################################
+# TIG for BUFGMUX SPEED CLK: please do not edit            #
+############################################################
+# want to TIG any timing paths to the select of the TX clock BUFGMUXs as this is always an async path
+# Changed net name in synthesis of axi_ethernet
+#PIN "*clock_inst*BUFGMUX*.I?" TNM="clk_bufgmux";
+PIN "*I_CLOCK_INST*/*BUFGMUX_SPEED_CLK.I?" TNM="clk_bufgmux";
+TIMESPEC "TS_bufgmux" = FROM "async_config" TO "clk_bufgmux" TIG;
+
+############################################################
+# Crossing of Clock Domain Constraints: please do not edit #
+############################################################
+# Flow Control logic reclocking - control signal is synchronised
+# Changed net name in synthesis of axi_ethernet
+INST "*/I_FLOW/I_RX_PAUSE/PAUSE_REQ_TO_TX" TNM="flow_rx_to_tx";
+INST "*/I_FLOW/I_RX_PAUSE/PAUSE_VALUE_TO_TX*" TNM="flow_rx_to_tx";
+TIMESPEC "TS_flow_rx_to_tx" = FROM "flow_rx_to_tx" TO tx_clock_gmii 8000 ps DATAPATHONLY;
+
+# generate a group of all flops NOT in the host clock domain
+TIMEGRP "all_ffs" = FFS;
+TIMEGRP "ffs_except_host" = "all_ffs" EXCEPT "host";
+
+# Configuration Register reclocking
+# Changed net name in synthesis of axi_ethernet
+INST "*/MANIFGEN.I_MANAGEN/I_CONF/RX0_OUT*" TNM="async_config";
+INST "*/MANIFGEN.I_MANAGEN/I_CONF/RX1_OUT*" TNM="async_config";
+INST "*/MANIFGEN.I_MANAGEN/I_CONF/FC_OUT_29" TNM="async_config";
+
+INST "*/MANIFGEN.I_MANAGEN/I_CONF/TX_OUT*" TNM="async_config";
+INST "*/MANIFGEN.I_MANAGEN/I_CONF/FC_OUT_30" TNM="async_config";
+
+# speed change config
+# Changed net name in synthesis of axi_ethernet
+INST "*/MANIFGEN.I_MANAGEN/I_CONF/CNFG_SPEED*" TNM="async_config";
+INST "*/I_?XGEN/*SPEED*" TNM="async_config";
+
+# Changed to comment out.  
+# In BSB systems the Host_clk = S_AXI_ACLK.  Since the CORE Gen TIG'd constraints below 
+# are affecting axi_ethernet DATAPATHONLY constraints above (at start of Soft_Ethernet_MAC constraints) 
+# these paths are commented out in favor of using the DATAPATHONLY constraints.  The constraints are:   
+#   "TS_axi4lite_clk_clk_2_TX_CLIENT_CLK" and "TS_TX_CLIENT_CLK_2_axi4lite_clk_clk" 
+# TIMESPEC "TS_host_clk_to_rx_clk" = FROM "host" TO "rx_clock" TIG;
+# TIMESPEC "TS_host_clk_to_tx_clk" = FROM "host" TO "tx_clock_gmii" TIG;
+
+TIMESPEC "TS_config_to_all"      = FROM "async_config" TO "ffs_except_host" TIG;
+
+# Address filter specific cross clocking
+# Changed net name in synthesis of axi_ethernet
+INST "*/I_ADDR_FILTER_TOP/dynamic_af_gen.I_DYNAMIC_CONFIG/unicast_addr_*" TNM="addr_config_to_rx";
+TIMESPEC "TS_addr_config_to_rx" = FROM "addr_config_to_rx" TO "ffs_except_host" TIG;
+
+# Neither of the 2 TIMESPECS below are analyzed
+TIMESPEC "TS_axistream_clk_2_RX_CLIENT_CLK" = FROM axistream_clk   TO clk_rx        8000 ps  DATAPATHONLY; #constant value based on Ethernet clock
+TIMESPEC "TS_RX_CLIENT_CLK_2_axistream_clk" = FROM clk_rx          TO axistream_clk 15000 ps  DATAPATHONLY; #varies based on period of AxiStream clock
+
+# Neither of the 2 TIMESPECS below are analyzed
+TIMESPEC "TS_axistream_clk_2_TX_CLIENT_CLK" = FROM axistream_clk   TO clk_tx_gmii   8000 ps  DATAPATHONLY; #constant value based on Ethernet clock
+TIMESPEC "TS_TX_CLIENT_CLK_2_axistream_clk" = FROM clk_tx_gmii     TO axistream_clk 15000 ps  DATAPATHONLY; #varies based on period of AxiStream clock
+
+# Rx Clock crossings - Some paths are analyzed by the TS_flow_rx_to_tx constraint also 
+# Needed since ts_resync_flops is commented out
+TIMESPEC "TS_RX_CLIENT_CLK_2_GTX_CLK" = FROM clk_rx                TO clk_gtx       8000 ps  DATAPATHONLY; #constant value based on constant 125 MHZ GTX clock 
+
+# Neither of the 2 TIMESPECS below are analyzed
+TIMESPEC "TS_axistream_clk_2_GTX_CLK" = FROM axistream_clk         TO clk_gtx       8000 ps  DATAPATHONLY; #constant value based on constant 125 MHZ GTX clock 
+TIMESPEC "TS_GTX_CLK_2_axistream_clk" = FROM clk_gtx               TO axistream_clk 15000 ps  DATAPATHONLY; #varies based on period of AxiStream clock 
+
+TIMESPEC "TS_axistream_clk_2_axi4lite_clk" = FROM axistream_clk    TO axi4lite_clk  30000 ps  DATAPATHONLY; #varies based on period of axi4lite_clk clock 
+TIMESPEC "TS_axi4lite_clk_2_axistream_clk" = FROM axi4lite_clk     TO axistream_clk 15000 ps  DATAPATHONLY; #varies based on period of AxiStream clock 
+
+TIMESPEC "TS_axi4lite_clk_clk_2_RX_CLIENT_CLK" = FROM axi4lite_clk TO clk_rx        8000 ps  DATAPATHONLY; #constant value based on Ethernet clock
+TIMESPEC "TS_RX_CLIENT_CLK_2_axi4lite_clk_clk" = FROM clk_rx       TO axi4lite_clk  30000 ps  DATAPATHONLY; #varies based on period of axi4lite_clk clock
+
+TIMESPEC "TS_axi4lite_clk_clk_2_TX_CLIENT_CLK" = FROM axi4lite_clk TO clk_tx_gmii   8000 ps  DATAPATHONLY; #constant value based on Ethernet clock
+TIMESPEC "TS_TX_CLIENT_CLK_2_axi4lite_clk_clk" = FROM clk_tx_gmii  TO axi4lite_clk  30000 ps  DATAPATHONLY; #varies based on period of axi4lite_clk clock
+
+NET "ETHERNET_MII_TX_CLK" CLOCK_DEDICATED_ROUTE = FALSE;
+
+INST *bufio_gmii_rx_clk LOC = BUFIO2_X0Y22;
+INST *bufg_gmii_rx_clk LOC = BUFGMUX_X2Y11;
